@@ -1,8 +1,9 @@
 package hyperbolic
 
 import (
-	"coxeter/vector"
 	"math"
+
+	"github.com/calummccain/coxeter/vector"
 )
 
 func GeodesicEndpoints(a, b [4]float64, l float64) ([4]float64, [4]float64) {

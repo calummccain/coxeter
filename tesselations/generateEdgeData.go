@@ -1,8 +1,9 @@
 package tesselations
 
 import (
-	"coxeter/hyperbolic"
 	"math"
+
+	"github.com/calummccain/coxeter/hyperbolic"
 )
 
 func GenerateEdgeData(evDist float64, e, v [][4]float64, fmat func([4]float64) [4]float64) [][2]int {

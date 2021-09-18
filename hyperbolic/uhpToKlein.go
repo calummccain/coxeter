@@ -1,7 +1,7 @@
 package hyperbolic
 
 import (
-	"coxeter/vector"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func UHPToKlein(vec [3]float64) [3]float64 {

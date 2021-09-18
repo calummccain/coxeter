@@ -1,8 +1,9 @@
 package data
 
 import (
-	"coxeter/shared"
 	"math"
+
+	"github.com/calummccain/coxeter/shared"
 )
 
 func RectifiedDodecahedronData(n float64) CellData {

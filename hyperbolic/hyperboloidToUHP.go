@@ -1,8 +1,9 @@
 package hyperbolic
 
 import (
-	"coxeter/vector"
 	"math"
+
+	"github.com/calummccain/coxeter/vector"
 )
 
 func HyperboloidToUHP(vec [4]float64) [3]float64 {

@@ -1,8 +1,9 @@
 package tesselations
 
 import (
-	"coxeter/shared"
-	"coxeter/vector"
+	"github.com/calummccain/coxeter/vector"
+
+	"github.com/calummccain/coxeter/shared"
 )
 
 func MakeCells(cell [4]float64, faceReflections []string, numLayers int, matrixDict shared.Matrices) ([][4]float64, []string) {

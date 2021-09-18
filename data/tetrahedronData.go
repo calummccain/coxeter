@@ -1,8 +1,9 @@
 package data
 
 import (
-	"coxeter/shared"
 	"math"
+
+	"github.com/calummccain/coxeter/shared"
 )
 
 func TetrahedronData(n float64) CellData {

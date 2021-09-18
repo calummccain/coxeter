@@ -1,7 +1,7 @@
 package spherical
 
 import (
-	"coxeter/vector"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func HyperToStereo(vec [4]float64) [3]float64 {

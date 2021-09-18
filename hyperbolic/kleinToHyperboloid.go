@@ -1,6 +1,6 @@
 package hyperbolic
 
-import "coxeter/vector"
+import "github.com/calummccain/coxeter/vector"
 
 func KleinToHyperboloid(vec [3]float64) [4]float64 {
 

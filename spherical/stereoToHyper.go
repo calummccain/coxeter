@@ -1,7 +1,7 @@
 package spherical
 
 import (
-	"coxeter/vector"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func StereoToHyper(vec [3]float64) [4]float64 {

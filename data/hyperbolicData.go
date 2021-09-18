@@ -1,11 +1,12 @@
 package data
 
 import (
-	"coxeter/hyperbolic"
-	"coxeter/shared"
-	"coxeter/tesselations"
-	"coxeter/vector"
 	"math"
+
+	"github.com/calummccain/coxeter/hyperbolic"
+	"github.com/calummccain/coxeter/shared"
+	"github.com/calummccain/coxeter/tesselations"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func HyperbolicData(p, q int, r float64, numberOfFaces int) CellData {

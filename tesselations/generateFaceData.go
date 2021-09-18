@@ -1,8 +1,9 @@
 package tesselations
 
 import (
-	"coxeter/hyperbolic"
 	"math"
+
+	"github.com/calummccain/coxeter/hyperbolic"
 )
 
 func GenerateFaceData(fvDist float64, numEdges int, f [][4]float64, v [][4]float64, fmat func([4]float64) [4]float64) [][]int {

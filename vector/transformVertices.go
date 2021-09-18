@@ -1,6 +1,6 @@
 package vector
 
-import "coxeter/shared"
+import "github.com/calummccain/coxeter/shared"
 
 func TransformVertices(baseVertices [][4]float64, transformation string, matrices shared.Matrices) [][4]float64 {
 

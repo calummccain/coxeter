@@ -1,8 +1,9 @@
 package hyperbolic
 
 import (
-	"coxeter/vector"
 	"math"
+
+	"github.com/calummccain/coxeter/vector"
 )
 
 func PoincareToHyperboloid(vec [3]float64) [4]float64 {

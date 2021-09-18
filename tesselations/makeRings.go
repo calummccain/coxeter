@@ -1,8 +1,9 @@
 package tesselations
 
 import (
-	"coxeter/shared"
-	"coxeter/vector"
+	"github.com/calummccain/coxeter/vector"
+
+	"github.com/calummccain/coxeter/shared"
 )
 
 func MakeRing(initialRings [][4]float64, matrixDict shared.Matrices, fNames []string) [][4]float64 {

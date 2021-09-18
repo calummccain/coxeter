@@ -1,6 +1,6 @@
 package data
 
-import "coxeter/shared"
+import "github.com/calummccain/coxeter/shared"
 
 type MetricValues struct {
 	E float64

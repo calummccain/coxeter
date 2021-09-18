@@ -1,7 +1,7 @@
 package tesselations
 
 import (
-	"coxeter/vector"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func min(a, b int) int {
