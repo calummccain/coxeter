@@ -77,13 +77,13 @@ func RectifiedOctahedronData(n float64) CellData {
 
 	if n == 3 {
 
-		a = Rt_2
-		b = Rt_2
+		a = Rt2 * Rt_3
+		b = Rt_3 * Rt_2
 
 	} else if n == 4 {
 
-		a = 1
-		b = 1
+		a = Rt2
+		b = Rt_2
 
 	} else if metric == 'e' {
 
@@ -92,7 +92,7 @@ func RectifiedOctahedronData(n float64) CellData {
 
 	} else {
 
-		a = math.Sqrt(math.Abs(cot))
+		a = math.Sqrt(math.Abs(2.0 * cot))
 		b = math.Sqrt(math.Abs((0.5 - cot)))
 
 	}
