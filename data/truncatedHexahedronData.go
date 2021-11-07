@@ -89,7 +89,7 @@ func TruncatedHexahedronData(n float64) CellData {
 
 		d = func(v [4]float64) [4]float64 {
 
-			c := math.Cos(math.Pi / n)
+			c := math.Cos(2.0 * math.Pi / n)
 
 			return [4]float64{
 				(1.0+2.0*c)*v[0] - 2.0*c*v[1],
@@ -113,7 +113,7 @@ func TruncatedHexahedronData(n float64) CellData {
 	} else if metric == 'p' {
 
 		a = 1.0
-		b = 1.0 / math.Sqrt(5.0-2.0*math.Sqrt(2.0))
+		b = 1.0 / math.Sqrt(5.0-2.0*Rt2)
 
 	} else {
 
@@ -135,10 +135,10 @@ func TruncatedHexahedronData(n float64) CellData {
 		NumFaces:        14,
 		FaceReflections: []string{"bc", "c", "cbabc", "abc", "", "babc"},
 		OuterReflection: "d",
-		V:               [4]float64{0, 0, 0, 0},
-		E:               [4]float64{0, 0, 0, 0},
-		F:               [4]float64{0, 0, 0, 0},
-		C:               [4]float64{0, 0, 0, 0},
+		V:               [4]float64{1, 1, 1, 1},
+		E:               [4]float64{1, 1, 1, 0},
+		F:               [4]float64{1, 1, 0, 0},
+		C:               [4]float64{1, 0, 0, 0},
 		CellType:        "spherical",
 		Vv:              vv,
 		MetricValues:    MetricValues{E: eVal, P: pVal},
