@@ -8,15 +8,15 @@ func Norm2(vec [2]float64) float64 {
 
 }
 
-func Norm3(vec [3]float64) float64 {
+func Norm3(vec Vec3) float64 {
 
-	return math.Sqrt(NormSquared3(vec))
+	return math.Sqrt(vec.NormSquared())
 
 }
 
-func Norm4(vec [4]float64) float64 {
+func Norm4(vec Vec4) float64 {
 
-	return math.Sqrt(NormSquared4(vec))
+	return math.Sqrt(vec.NormSquared())
 
 }
 
