@@ -101,7 +101,7 @@ func TetrahedronData(n float64) CellData {
 	} else if n == 5 {
 
 		a = P2 * 0.5 * Rt_2
-		b = 0.25 * Rt_2 * P_1
+		b = 0.5 * Rt_2 * P_1
 
 	} else if n == 6 {
 
