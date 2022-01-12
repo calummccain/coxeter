@@ -6,11 +6,11 @@ func Sum1(vec1, vec2 [1]float64) [1]float64 {
 
 }
 
-func Sum2(vec1, vec2 [2]float64) [2]float64 {
+// func Sum2(vec1, vec2 [2]float64) [2]float64 {
 
-	return [2]float64{vec1[0] + vec2[0], vec1[1] + vec2[1]}
+// 	return [2]float64{vec1[0] + vec2[0], vec1[1] + vec2[1]}
 
-}
+// }
 
 // func Sum3(vec1, vec2 [3]float64) [3]float64 {
 

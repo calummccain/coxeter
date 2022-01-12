@@ -1,8 +1,8 @@
 package vector
 
-func PointInPolygon(point [3]float64, polygon [][3]float64) bool {
+func PointInPolygon(point Vec3, polygon []Vec3) bool {
 
-	var v0, v1, v2 [3]float64
+	var v0, v1, v2 Vec3
 	var dot01, dot12, dot20, dot11, dot22 float64
 
 	for i := 1; i < len(polygon)-1; i++ {

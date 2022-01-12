@@ -58,6 +58,18 @@ func Dot3(v, w Vec3) float64 {
 	return v.X*w.X + v.Y*w.Y + v.Z*w.Z
 }
 
+func Midpoint3(v, w Vec3) Vec3 {
+	return Scale3(Sum3(v, w), 0.5)
+}
+
 func Cross3(v, w Vec3) Vec3 {
 	return Vec3{v.Y*w.Z - v.Z*w.Y, v.Z*w.X - v.X*w.Z, v.X*w.Y - v.Y*w.X}
+}
+
+func NormSquared3(v Vec3) float64 {
+	return v.X*v.X + v.Y*v.Y + v.Z*v.Z
+}
+
+func DistanceSquared3(v, w Vec3) float64 {
+	return NormSquared3(Diff3(v, w))
 }

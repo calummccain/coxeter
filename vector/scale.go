@@ -6,11 +6,11 @@ func Scale1(vec [1]float64, a float64) [1]float64 {
 
 }
 
-func Scale2(vec [2]float64, a float64) [2]float64 {
+// func Scale2(vec [2]float64, a float64) [2]float64 {
 
-	return [2]float64{a * vec[0], a * vec[1]}
+// 	return [2]float64{a * vec[0], a * vec[1]}
 
-}
+// }
 
 // func Scale3(vec [3]float64, a float64) [3]float64 {
 

@@ -1,12 +1,12 @@
 package vector
 
-func IsInArray(testVector [4]float64, groupVectors [][4]float64) bool {
+func IsInArray(testVector Vec4, groupVectors []Vec4) bool {
 
 	eps := IsInArrayEps
 
 	for i := 0; i < len(groupVectors); i++ {
 
-		if DistanceSquared(testVector[:], groupVectors[i][:]) < eps {
+		if DistanceSquared4(testVector, groupVectors[i]) < eps {
 
 			return true
 
@@ -17,11 +17,11 @@ func IsInArray(testVector [4]float64, groupVectors [][4]float64) bool {
 
 }
 
-func IsInArray2(testVector [2]int, groupVectors [][2]int) bool {
+func IsInArray2(testVector Vec2, groupVectors []Vec2) bool {
 
 	for i := 0; i < len(groupVectors); i++ {
 
-		if groupVectors[i][0] == testVector[0] && groupVectors[i][1] == testVector[1] {
+		if groupVectors[i].X == testVector.X && groupVectors[i].Y == testVector.Y {
 
 			return true
 
