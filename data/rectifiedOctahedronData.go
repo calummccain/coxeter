@@ -3,7 +3,7 @@ package data
 import (
 	"math"
 
-	"github.com/calummccain/coxeter/shared"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func RectifiedOctahedronData(n float64) CellData {
@@ -29,50 +29,50 @@ func RectifiedOctahedronData(n float64) CellData {
 
 	}
 
-	var d func([4]float64) [4]float64
+	var d func(vector.Vec4) vector.Vec4
 
 	if n == 3 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				0.5 * (v[0] + v[1] + v[2] + v[3]),
-				0.5 * (v[0] + v[1] - v[2] - v[3]),
-				0.5 * (v[0] - v[1] + v[2] - v[3]),
-				0.5 * (v[0] - v[1] - v[2] + v[3]),
+			return vector.Vec4{
+				0.5 * (v.W + v.X + v.Y + v.Z),
+				0.5 * (v.W + v.X - v.Y - v.Z),
+				0.5 * (v.W - v.X + v.Y - v.Z),
+				0.5 * (v.W - v.X - v.Y + v.Z),
 			}
 
 		}
 
 	} else if n == 4 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				2*v[0] - v[1] - v[2] - v[3],
-				v[0] - v[2] - v[3],
-				v[0] - v[1] - v[3],
-				v[0] - v[1] - v[2],
+			return vector.Vec4{
+				2*v.W - v.X - v.Y - v.Z,
+				v.W - v.Y - v.Z,
+				v.W - v.X - v.Z,
+				v.W - v.X - v.Y,
 			}
 
 		}
 
 	} else {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				(6*cos-2)*(v[0]-v[1]-v[2]-v[3]) + v[0],
-				2*cos*(v[0]-v[1]-v[2]-v[3]) + v[1],
-				2*cos*(v[0]-v[1]-v[2]-v[3]) + v[2],
-				2*cos*(v[0]-v[1]-v[2]-v[3]) + v[3],
+			return vector.Vec4{
+				(6*cos-2)*(v.W-v.X-v.Y-v.Z) + v.W,
+				2*cos*(v.W-v.X-v.Y-v.Z) + v.X,
+				2*cos*(v.W-v.X-v.Y-v.Z) + v.Y,
+				2*cos*(v.W-v.X-v.Y-v.Z) + v.Z,
 			}
 
 		}
 
 	}
 
-	var f func([4]float64) [4]float64
+	var f func(vector.Vec4) vector.Vec4
 	var a, b float64
 
 	if n == 3 {
@@ -97,9 +97,9 @@ func RectifiedOctahedronData(n float64) CellData {
 
 	}
 
-	f = func(v [4]float64) [4]float64 {
+	f = func(v vector.Vec4) vector.Vec4 {
 
-		return [4]float64{a * v[0], b * v[1], b * v[2], b * v[3]}
+		return vector.Vec4{a * v.W, b * v.X, b * v.Y, b * v.Z}
 
 	}
 
@@ -110,14 +110,14 @@ func RectifiedOctahedronData(n float64) CellData {
 		NumFaces:        14,
 		FaceReflections: []string{"", "c", "bc", "cbc", "abc", "cabc", "bcabc", "cbcabc"},
 		OuterReflection: "d",
-		V:               [4]float64{0, 0, 0, 0},
-		E:               [4]float64{0, 0, 0, 0},
-		F:               [4]float64{0, 0, 0, 0},
-		C:               [4]float64{0, 0, 0, 0},
+		V:               vector.Vec4{0, 0, 0, 0},
+		E:               vector.Vec4{0, 0, 0, 0},
+		F:               vector.Vec4{0, 0, 0, 0},
+		C:               vector.Vec4{0, 0, 0, 0},
 		CellType:        "spherical",
-		Vv:              vv,
+		VV:              vv,
 		MetricValues:    MetricValues{E: eVal, P: pVal},
-		Vertices: [][4]float64{
+		Vertices: []vector.Vec4{
 			{1, 1, 1, 0}, {1, 1, 0, 1}, {1, 0, 1, 1},
 			{1, 1, -1, 0}, {1, -1, 0, 1}, {1, 0, 1, -1},
 			{1, -1, 1, 0}, {1, 1, 0, -1}, {1, 0, -1, 1},
@@ -135,14 +135,11 @@ func RectifiedOctahedronData(n float64) CellData {
 			{0, 5, 6, 2}, {1, 2, 4, 8}, {0, 1, 3, 7},
 			{3, 8, 9, 11}, {5, 7, 11, 10}, {4, 6, 10, 9},
 		},
-		Matrices: shared.Matrices{
-			A: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[2], v[1], v[3]} },
-			B: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], v[3], v[2]} },
-			C: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], v[2], -v[3]} },
-			D: d,
-			E: func(v [4]float64) [4]float64 { return v },
-			F: f,
-		},
-		Flip: func(v [4]float64) [4]float64 { return [4]float64{-v[0], v[1], v[2], v[3]} },
+		Amat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.Y, v.X, v.Z} },
+		Bmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Z, v.Y} },
+		Cmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Y, -v.Z} },
+		Dmat: d,
+		Emat: func(v vector.Vec4) vector.Vec4 { return v },
+		Fmat: f,
 	}
 }

@@ -3,7 +3,7 @@ package data
 import (
 	"math"
 
-	"github.com/calummccain/coxeter/shared"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func TruncatedHexahedronData(n float64) CellData {
@@ -31,78 +31,78 @@ func TruncatedHexahedronData(n float64) CellData {
 
 	}
 
-	var d func([4]float64) [4]float64
+	var d func(vector.Vec4) vector.Vec4
 
 	if n == 3 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				v[1],
-				v[0],
-				v[2],
-				v[3],
+			return vector.Vec4{
+				v.X,
+				v.W,
+				v.Y,
+				v.Z,
 			}
 
 		}
 
 	} else if n == 4 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				v[0],
-				2.0*v[0] - v[1],
-				v[2],
-				v[3],
+			return vector.Vec4{
+				v.W,
+				2.0*v.W - v.X,
+				v.Y,
+				v.Z,
 			}
 
 		}
 
 	} else if n == 5 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				P*v[0] - P_1*v[1],
-				P2*v[0] - P*v[1],
-				v[2],
-				v[3],
+			return vector.Vec4{
+				P*v.W - P_1*v.X,
+				P2*v.W - P*v.X,
+				v.Y,
+				v.Z,
 			}
 
 		}
 
 	} else if n == 6 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				2.0*v[0] - v[1],
-				3.0*v[0] - 2.0*v[1],
-				v[2],
-				v[3],
+			return vector.Vec4{
+				2.0*v.W - v.X,
+				3.0*v.W - 2.0*v.X,
+				v.Y,
+				v.Z,
 			}
 
 		}
 
 	} else {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
 			c := math.Cos(2.0 * math.Pi / n)
 
-			return [4]float64{
-				(1.0+2.0*c)*v[0] - 2.0*c*v[1],
-				2.0 + 2.0*c*v[0] - (1.0+2.0*c)*v[1],
-				v[2],
-				v[3],
+			return vector.Vec4{
+				(1.0+2.0*c)*v.W - 2.0*c*v.X,
+				2.0 + 2.0*c*v.W - (1.0+2.0*c)*v.X,
+				v.Y,
+				v.Z,
 			}
 
 		}
 
 	}
 
-	var f func([4]float64) [4]float64
+	var f func(vector.Vec4) vector.Vec4
 	var a, b float64
 
 	if n == 4 {
@@ -122,9 +122,9 @@ func TruncatedHexahedronData(n float64) CellData {
 
 	}
 
-	f = func(v [4]float64) [4]float64 {
+	f = func(v vector.Vec4) vector.Vec4 {
 
-		return [4]float64{a * v[0], b * v[1], b * v[2], b * v[3]}
+		return vector.Vec4{a * v.W, b * v.X, b * v.Y, b * v.Z}
 
 	}
 
@@ -135,14 +135,14 @@ func TruncatedHexahedronData(n float64) CellData {
 		NumFaces:        14,
 		FaceReflections: []string{"bc", "c", "cbabc", "abc", "", "babc"},
 		OuterReflection: "d",
-		V:               [4]float64{1, 1, 1, 1},
-		E:               [4]float64{1, 1, 1, 0},
-		F:               [4]float64{1, 1, 0, 0},
-		C:               [4]float64{1, 0, 0, 0},
+		V:               vector.Vec4{1, 1, 1, 1},
+		E:               vector.Vec4{1, 1, 1, 0},
+		F:               vector.Vec4{1, 1, 0, 0},
+		C:               vector.Vec4{1, 0, 0, 0},
 		CellType:        "spherical",
-		Vv:              vv,
+		VV:              vv,
 		MetricValues:    MetricValues{E: eVal, P: pVal},
-		Vertices: [][4]float64{
+		Vertices: []vector.Vec4{
 			{1, 1, 1, factor}, {1, 1, factor, 1}, {1, factor, 1, 1},
 			{1, 1, 1, -factor}, {1, 1, factor, -1}, {1, factor, 1, -1},
 			{1, 1, -1, factor}, {1, 1, -factor, 1}, {1, factor, -1, 1},
@@ -166,14 +166,11 @@ func TruncatedHexahedronData(n float64) CellData {
 			{1, 2, 14, 13, 19, 20, 8, 7}, {6, 8, 20, 18, 21, 23, 11, 9},
 			{4, 5, 17, 16, 22, 23, 11, 10}, {12, 13, 19, 18, 21, 22, 16, 15},
 		},
-		Matrices: shared.Matrices{
-			A: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], v[2], -v[3]} },
-			B: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], v[3], v[2]} },
-			C: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[2], v[1], v[3]} },
-			D: d,
-			E: func(v [4]float64) [4]float64 { return v },
-			F: f,
-		},
-		Flip: func(v [4]float64) [4]float64 { return [4]float64{-v[0], v[1], v[2], v[3]} },
+		Amat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Y, -v.Z} },
+		Bmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Z, v.Y} },
+		Cmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.Y, v.X, v.Z} },
+		Dmat: d,
+		Emat: func(v vector.Vec4) vector.Vec4 { return v },
+		Fmat: f,
 	}
 }

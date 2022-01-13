@@ -3,7 +3,7 @@ package data
 import (
 	"math"
 
-	"github.com/calummccain/coxeter/shared"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func TruncatedTetrahedronData(n float64) CellData {
@@ -31,7 +31,7 @@ func TruncatedTetrahedronData(n float64) CellData {
 
 	}
 
-	var f func([4]float64) [4]float64
+	var f func(vector.Vec4) vector.Vec4
 	var a, b float64
 
 	if metric == 'e' {
@@ -51,9 +51,9 @@ func TruncatedTetrahedronData(n float64) CellData {
 
 	}
 
-	f = func(v [4]float64) [4]float64 {
+	f = func(v vector.Vec4) vector.Vec4 {
 
-		return [4]float64{a * v[0], b * v[1], b * v[2], b * v[3]}
+		return vector.Vec4{a * v.W, b * v.X, b * v.Y, b * v.Z}
 
 	}
 
@@ -64,14 +64,14 @@ func TruncatedTetrahedronData(n float64) CellData {
 		NumFaces:        8,
 		FaceReflections: []string{"", "abc", "bc", "c"},
 		OuterReflection: "d",
-		V:               [4]float64{0, 0, 0, 0},
-		E:               [4]float64{0, 0, 0, 0},
-		F:               [4]float64{0, 0, 0, 0},
-		C:               [4]float64{0, 0, 0, 0},
+		V:               vector.Vec4{0, 0, 0, 0},
+		E:               vector.Vec4{0, 0, 0, 0},
+		F:               vector.Vec4{0, 0, 0, 0},
+		C:               vector.Vec4{0, 0, 0, 0},
 		CellType:        "spherical",
-		Vv:              vv,
+		VV:              vv,
 		MetricValues:    MetricValues{E: eVal, P: pVal},
-		Vertices: [][4]float64{
+		Vertices: []vector.Vec4{
 			{1, 1, third, third}, {1, third, 1, third}, {1, third, third, 1},
 			{1, 1, -third, -third}, {1, third, -1, -third}, {1, third, -third, -1},
 			{1, -1, third, -third}, {1, -third, 1, -third}, {1, -third, third, -1},
@@ -87,21 +87,18 @@ func TruncatedTetrahedronData(n float64) CellData {
 			{0, 2, 11, 10, 4, 3}, {0, 1, 7, 8, 5, 3},
 			{1, 2, 11, 9, 6, 7}, {4, 5, 8, 6, 9, 10},
 		},
-		Matrices: shared.Matrices{
-			A: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], -v[3], -v[2]} },
-			B: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[2], v[1], v[3]} },
-			C: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], v[3], v[2]} },
-			D: func(v [4]float64) [4]float64 {
-				return [4]float64{
-					(3*sin-1)*(-v[0]+v[1]+v[2]-v[3]) + v[0],
-					cos*(v[0]-v[1]-v[2]+v[3]) + v[1],
-					cos*(v[0]-v[1]-v[2]+v[3]) + v[2],
-					cos*(-v[0]+v[1]+v[2]-v[3]) + v[3],
-				}
-			},
-			E: func(v [4]float64) [4]float64 { return v },
-			F: f,
+		Amat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, -v.Z, -v.Y} },
+		Bmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.Y, v.X, v.Z} },
+		Cmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Z, v.Y} },
+		Dmat: func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{
+				(3*sin-1)*(-v.W+v.X+v.Y-v.Z) + v.W,
+				cos*(v.W-v.X-v.Y+v.Z) + v.X,
+				cos*(v.W-v.X-v.Y+v.Z) + v.Y,
+				cos*(-v.W+v.X+v.Y-v.Z) + v.Z,
+			}
 		},
-		Flip: func(v [4]float64) [4]float64 { return [4]float64{-v[0], v[1], v[2], v[3]} },
+		Emat: func(v vector.Vec4) vector.Vec4 { return v },
+		Fmat: f,
 	}
 }

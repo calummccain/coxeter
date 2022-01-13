@@ -3,7 +3,7 @@ package data
 import (
 	"math"
 
-	"github.com/calummccain/coxeter/shared"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func TruncatedDodecahedronData(n float64) CellData {
@@ -37,76 +37,76 @@ func TruncatedDodecahedronData(n float64) CellData {
 
 	}
 
-	var d func([4]float64) [4]float64
+	var d func(vector.Vec4) vector.Vec4
 
 	if n == 3 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				(P*v[0] + v[1]*P_3 + v[3]*P_4) * 0.5,
-				(P3*v[0] - v[1]*P_1 - P*v[3]) * 0.5,
-				v[2],
-				(P2*v[0] - P*v[1] + v[3]) * 0.5,
+			return vector.Vec4{
+				(P*v.W + v.X*P_3 + v.Z*P_4) * 0.5,
+				(P3*v.W - v.X*P_1 - P*v.Z) * 0.5,
+				v.Y,
+				(P2*v.W - P*v.X + v.Z) * 0.5,
 			}
 
 		}
 
 	} else if n == 4 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				P2*v[0] - v[1] - v[3]*P_1,
-				P3*v[0] - P*v[1] - P*v[3],
-				v[2],
-				P2*v[0] - P*v[1],
+			return vector.Vec4{
+				P2*v.W - v.X - v.Z*P_1,
+				P3*v.W - P*v.X - P*v.Z,
+				v.Y,
+				P2*v.W - P*v.X,
 			}
 
 		}
 
 	} else if n == 5 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				((4*P+1)*v[0] - (5-P)*v[1] - (5*P-6)*v[3]) * 0.5,
-				(P5*v[0] + (2-P4)*v[1] - P3*v[3]) * 0.5,
-				v[2],
-				(P4*v[0] - P3*v[1] - v[3]*P_1) * 0.5,
+			return vector.Vec4{
+				((4*P+1)*v.W - (5-P)*v.X - (5*P-6)*v.Z) * 0.5,
+				(P5*v.W + (2-P4)*v.X - P3*v.Z) * 0.5,
+				v.Y,
+				(P4*v.W - P3*v.X - v.Z*P_1) * 0.5,
 			}
 
 		}
 
 	} else if n == 6 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				((2+P4)*v[0] - P3*v[1] - P2*v[3]) * 0.5,
-				(3*P3*v[0] + (2-3*P2)*v[1] - 3*P*v[3]) * 0.5,
-				v[2],
-				(3*P2*v[0] - 3*P*v[1] - v[3]) * 0.5,
+			return vector.Vec4{
+				((2+P4)*v.W - P3*v.X - P2*v.Z) * 0.5,
+				(3*P3*v.W + (2-3*P2)*v.X - 3*P*v.Z) * 0.5,
+				v.Y,
+				(3*P2*v.W - 3*P*v.X - v.Z) * 0.5,
 			}
 
 		}
 
 	} else {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				(2*P*Rt5*cos-1)*v[0] - (2*Rt5*cos-2*P_1)*v[1] - (2*Rt5*cos*P_1-2*P_2)*v[3],
-				2*P3*cos*v[0] + (1-2*P2*cos)*v[1] - 2*P*cos*v[3],
-				v[2],
-				2*P2*cos*v[0] - 2*P*cos*v[1] + (1-2*cos)*v[3],
+			return vector.Vec4{
+				(2*P*Rt5*cos-1)*v.W - (2*Rt5*cos-2*P_1)*v.X - (2*Rt5*cos*P_1-2*P_2)*v.Z,
+				2*P3*cos*v.W + (1-2*P2*cos)*v.X - 2*P*cos*v.Z,
+				v.Y,
+				2*P2*cos*v.W - 2*P*cos*v.X + (1-2*cos)*v.Z,
 			}
 
 		}
 
 	}
 
-	var f func([4]float64) [4]float64
+	var f func(vector.Vec4) vector.Vec4
 	var a, b float64
 
 	if metric == 'p' {
@@ -126,9 +126,9 @@ func TruncatedDodecahedronData(n float64) CellData {
 
 	}
 
-	f = func(v [4]float64) [4]float64 {
+	f = func(v vector.Vec4) vector.Vec4 {
 
-		return [4]float64{a * v[0], b * v[1], b * v[2], b * v[3]}
+		return vector.Vec4{a * v.W, b * v.X, b * v.Y, b * v.Z}
 
 	}
 
@@ -143,14 +143,14 @@ func TruncatedDodecahedronData(n float64) CellData {
 			"abc", "acbabc", "abacbabc",
 		},
 		OuterReflection: "d",
-		V:               [4]float64{1, P, P_1, 0},
-		E:               [4]float64{1, P, 0, 0},
-		F:               [4]float64{3 - P, P, 0, 1},
-		C:               [4]float64{1, 0, 0, 0},
+		V:               vector.Vec4{1, P, P_1, 0},
+		E:               vector.Vec4{1, P, 0, 0},
+		F:               vector.Vec4{3 - P, P, 0, 1},
+		C:               vector.Vec4{1, 0, 0, 0},
 		CellType:        "spherical",
-		Vv:              vv,
+		VV:              vv,
 		MetricValues:    MetricValues{E: eVal, P: pVal},
-		Vertices: [][4]float64{
+		Vertices: []vector.Vec4{
 			{1, B, C, -E}, {1, B, C, E}, {1, P, G, 0},
 			{1, P, -G, 0}, {1, B, -C, -E}, {1, B, -C, E},
 			{1, F, -A, D}, {1, A, -D, F}, {1, D, -F, A},
@@ -204,16 +204,13 @@ func TruncatedDodecahedronData(n float64) CellData {
 			{37, 38, 39, 40, 42, 43, 58, 57, 56, 55}, {16, 17, 18, 19, 46, 45, 59, 58, 43, 44},
 			{19, 20, 21, 23, 24, 25, 49, 48, 47, 46}, {45, 47, 48, 50, 51, 53, 54, 56, 57, 59},
 		},
-		Matrices: shared.Matrices{
-			A: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], -v[2], v[3]} },
-			B: func(v [4]float64) [4]float64 {
-				return [4]float64{v[0], 0.5 * (P*v[1] + v[2] + v[3]*P_1), 0.5 * (v[1] - v[2]*P_1 - P*v[3]), 0.5 * (v[1]*P_1 - P*v[2] + v[3])}
-			},
-			C: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], v[2], -v[3]} },
-			D: d,
-			E: func(v [4]float64) [4]float64 { return v },
-			F: f,
+		Amat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, -v.Y, v.Z} },
+		Bmat: func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{v.W, 0.5 * (P*v.X + v.Y + v.Z*P_1), 0.5 * (v.X - v.Y*P_1 - P*v.Z), 0.5 * (v.X*P_1 - P*v.Y + v.Z)}
 		},
-		Flip: func(v [4]float64) [4]float64 { return [4]float64{-v[0], v[1], v[2], v[3]} },
+		Cmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Y, -v.Z} },
+		Dmat: d,
+		Emat: func(v vector.Vec4) vector.Vec4 { return v },
+		Fmat: f,
 	}
 }

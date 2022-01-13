@@ -3,7 +3,7 @@ package data
 import (
 	"math"
 
-	"github.com/calummccain/coxeter/shared"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func TruncatedIcosahedronData(n float64) CellData {
@@ -36,37 +36,37 @@ func TruncatedIcosahedronData(n float64) CellData {
 
 	}
 
-	var d func([4]float64) [4]float64
+	var d func(vector.Vec4) vector.Vec4
 
 	if n == 3 {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				0.5 * ((P4-1.0)*v[0] - (P3-3.0*P_1)*v[2] - (P-3.0*P_3)*v[3]),
-				v[1],
-				0.5 * (P5*v[0] + (2.0-P4)*v[2] - P2*v[3]),
-				0.5 * (P3*v[0] - P2*v[2] + v[3]),
+			return vector.Vec4{
+				0.5 * ((P4-1.0)*v.W - (P3-3.0*P_1)*v.Y - (P-3.0*P_3)*v.Z),
+				v.X,
+				0.5 * (P5*v.W + (2.0-P4)*v.Y - P2*v.Z),
+				0.5 * (P3*v.W - P2*v.Y + v.Z),
 			}
 
 		}
 
 	} else {
 
-		d = func(v [4]float64) [4]float64 {
+		d = func(v vector.Vec4) vector.Vec4 {
 
-			return [4]float64{
-				(6.0*P2*cos-1.0)*v[0] + (2.0*P_1-6.0*P*cos)*v[2] + (2.0*P_3-6.0*cos*P_1)*v[3],
-				v[1],
-				2.0*P5*cos*v[0] + (1.0-2.0*P4*cos)*v[2] - 2.0*P2*cos*v[3],
-				2.0*P3*cos*v[0] - 2.0*P2*cos*v[2] + (1.0-2.0*cos)*v[3],
+			return vector.Vec4{
+				(6.0*P2*cos-1.0)*v.W + (2.0*P_1-6.0*P*cos)*v.Y + (2.0*P_3-6.0*cos*P_1)*v.Z,
+				v.X,
+				2.0*P5*cos*v.W + (1.0-2.0*P4*cos)*v.Y - 2.0*P2*cos*v.Z,
+				2.0*P3*cos*v.W - 2.0*P2*cos*v.Y + (1.0-2.0*cos)*v.Z,
 			}
 
 		}
 
 	}
 
-	var f func([4]float64) [4]float64
+	var f func(vector.Vec4) vector.Vec4
 	var a, b float64
 
 	if metric == 'e' {
@@ -86,9 +86,9 @@ func TruncatedIcosahedronData(n float64) CellData {
 
 	}
 
-	f = func(v [4]float64) [4]float64 {
+	f = func(v vector.Vec4) vector.Vec4 {
 
-		return [4]float64{a * v[0], b * v[1], b * v[2], b * v[3]}
+		return vector.Vec4{a * v.W, b * v.X, b * v.Y, b * v.Z}
 
 	}
 
@@ -104,14 +104,14 @@ func TruncatedIcosahedronData(n float64) CellData {
 			"abacabacbc", "abcabacbc", "bacaacbcabacbcbcbaca",
 			"bacbc", "abacbc", "acabacbc", "cabacbc"},
 		OuterReflection: "d",
-		V:               [4]float64{0, 0, 0, 0},
-		E:               [4]float64{0, 0, 0, 0},
-		F:               [4]float64{0, 0, 0, 0},
-		C:               [4]float64{0, 0, 0, 0},
+		V:               vector.Vec4{0, 0, 0, 0},
+		E:               vector.Vec4{0, 0, 0, 0},
+		F:               vector.Vec4{0, 0, 0, 0},
+		C:               vector.Vec4{0, 0, 0, 0},
 		CellType:        "spherical",
-		Vv:              vv,
+		VV:              vv,
 		MetricValues:    MetricValues{E: eVal, P: pVal},
-		Vertices: [][4]float64{
+		Vertices: []vector.Vec4{
 			{1, F, D, A}, {1, B, E, C}, {1, B, E, -C}, {1, F, D, -A}, {1, C, P, 0},
 			{1, C, B, E}, {1, A, F, D}, {1, 0, C, P}, {1, -A, F, D}, {1, -C, B, E},
 			{1, -F, D, A}, {1, -C, P, 0}, {1, -F, D, -A}, {1, -B, E, -C}, {1, -B, E, C},
@@ -157,16 +157,13 @@ func TruncatedIcosahedronData(n float64) CellData {
 			{2, 3, 21, 22, 26, 25}, {22, 23, 57, 58, 27, 26}, {23, 24, 43, 44, 56, 57},
 			{40, 44, 56, 55, 45, 46}, {45, 49, 50, 54, 59, 55},
 		},
-		Matrices: shared.Matrices{
-			A: func(v [4]float64) [4]float64 { return [4]float64{v[0], -v[1], v[2], v[3]} },
-			B: func(v [4]float64) [4]float64 {
-				return [4]float64{v[0], 0.5 * (v[1] + P_1*v[2] - P*v[3]), 0.5 * (P_1*v[1] + P*v[2] + v[3]), 0.5 * (-P*v[1] + v[2] - P_1*v[3])}
-			},
-			C: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], v[2], -v[3]} },
-			D: d,
-			E: func(v [4]float64) [4]float64 { return v },
-			F: f,
+		Amat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, -v.X, v.Y, v.Z} },
+		Bmat: func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{v.W, 0.5 * (v.X + P_1*v.Y - P*v.Z), 0.5 * (P_1*v.X + P*v.Y + v.Z), 0.5 * (-P*v.X + v.Y - P_1*v.Z)}
 		},
-		Flip: func(v [4]float64) [4]float64 { return [4]float64{-v[0], v[1], v[2], v[3]} },
+		Cmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Y, -v.Z} },
+		Dmat: d,
+		Emat: func(v vector.Vec4) vector.Vec4 { return v },
+		Fmat: f,
 	}
 }
