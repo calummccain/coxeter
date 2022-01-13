@@ -1,6 +1,8 @@
 package data
 
-import "github.com/calummccain/coxeter/shared"
+import (
+	"github.com/calummccain/coxeter/vector"
+)
 
 type MetricValues struct {
 	E float64
@@ -9,7 +11,7 @@ type MetricValues struct {
 
 type CellData struct {
 	Metric          byte
-	Vertices        [][4]float64
+	Vertices        []vector.Vec4
 	Edges           [][2]int
 	Faces           [][]int
 	NumVertices     int
@@ -17,13 +19,23 @@ type CellData struct {
 	NumFaces        int
 	FaceReflections []string
 	OuterReflection string
-	V               [4]float64
-	E               [4]float64
-	F               [4]float64
-	C               [4]float64
+	V               vector.Vec4
+	E               vector.Vec4
+	F               vector.Vec4
+	C               vector.Vec4
 	CellType        string
-	Vv              float64
+	VV              float64
+	CF              float64
+	CE              float64
+	CV              float64
+	FE              float64
+	FV              float64
+	EV              float64
 	MetricValues    MetricValues
-	Matrices        shared.Matrices
-	Flip            func([4]float64) [4]float64
+	Amat            func(vector.Vec4) vector.Vec4
+	Bmat            func(vector.Vec4) vector.Vec4
+	Cmat            func(vector.Vec4) vector.Vec4
+	Dmat            func(vector.Vec4) vector.Vec4
+	Emat            func(vector.Vec4) vector.Vec4
+	Fmat            func(vector.Vec4) vector.Vec4
 }
