@@ -32,18 +32,18 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 
 	}
 
-	cMat := func(v [4]float64) [4]float64 {
+	cMat := func(v vector.Vec4) vector.Vec4 {
 
-		return [4]float64{
-			(1.0+2.0*cos)*v[0] - 2.0*(cos*cos)*v[1] - cos*v[2] - 3.0*cos*v[3],
-			2.0*v[0] + (1.0-2.0*cos)*v[1] - v[2] - 3.0*v[3],
-			v[0] - cos*v[1] + 0.5*v[2] - 1.5*v[3],
-			v[0] - cos*v[1] - 0.5*v[2] - 0.5*v[3],
+		return vector.Vec4{
+			(1.0+2.0*cos)*v.W - 2.0*(cos*cos)*v.X - cos*v.Y - 3.0*cos*v.Z,
+			2.0*v.W + (1.0-2.0*cos)*v.X - v.Y - 3.0*v.Z,
+			v.W - cos*v.X + 0.5*v.Y - 1.5*v.Z,
+			v.W - cos*v.X - 0.5*v.Y - 0.5*v.Z,
 		}
 
 	}
 
-	var f func([4]float64) [4]float64
+	var f func(vector.Vec4) vector.Vec4
 	var a, b, c, d float64
 
 	if metric == 'p' {
@@ -62,33 +62,33 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 
 	}
 
-	f = func(v [4]float64) [4]float64 {
+	f = func(v vector.Vec4) vector.Vec4 {
 
-		return [4]float64{a * v[0], b * v[1], c * v[2], d * v[3]}
+		return vector.Vec4{a * v.W, b * v.X, c * v.Y, d * v.Z}
 
 	}
 
 	matrices := shared.Matrices{
-		A: func(v [4]float64) [4]float64 {
-			return [4]float64{v[0], v[1], -0.5*v[2] + 1.5*v[3], 0.5 * (v[2] + v[3])}
+		Amat: func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{v.W, v.X, -0.5*v.Y + 1.5*v.Z, 0.5 * (v.Y + v.Z)}
 		},
-		B: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], v[2], -v[3]} },
+		Bmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Y, -v.Z} },
 		C: cMat,
-		D: func(v [4]float64) [4]float64 { return [4]float64{v[0], -v[1], v[2], v[3]} },
-		E: func(v [4]float64) [4]float64 { return v },
-		F: f,
+		Dmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, -v.X, v.Y, v.Z} },
+		Emat: func(v vector.Vec4) vector.Vec4 { return v },
+		Fmat: f,
 	}
 
-	initialVerts := [][4]float64{
+	initialVerts := []vector.Vec4{
 		{1, 0, 2, 0},
 		{1, 0, -1, -1},
 		{1, 0, -1, 1},
 	}
 
-	initialEdges := [][4]float64{
-		vector.Scale4([4]float64{2, 0, 1, -1}, 1.0/math.Sqrt(math.Abs(hyperbolic.HyperbolicNorm(f([4]float64{2, 0, 1, -1}))))),
-		vector.Scale4([4]float64{2, 0, 1, 1}, 1.0/math.Sqrt(math.Abs(hyperbolic.HyperbolicNorm(f([4]float64{2, 0, 1, 1}))))),
-		vector.Scale4([4]float64{1, 0, -1, 0}, 1.0/math.Sqrt(math.Abs(hyperbolic.HyperbolicNorm(f([4]float64{1, 0, -1, 0}))))),
+	initialEdges := []vector.Vec4{
+		vector.Scale4(vector.Vec4{2, 0, 1, -1}, 1.0/math.Sqrt(math.Abs(hyperbolic.HyperbolicNorm(f(vector.Vec4{2, 0, 1, -1}))))),
+		vector.Scale4(vector.Vec4{2, 0, 1, 1}, 1.0/math.Sqrt(math.Abs(hyperbolic.HyperbolicNorm(f(vector.Vec4{2, 0, 1, 1}))))),
+		vector.Scale4(vector.Vec4{1, 0, -1, 0}, 1.0/math.Sqrt(math.Abs(hyperbolic.HyperbolicNorm(f(vector.Vec4{1, 0, -1, 0}))))),
 	}
 
 	fVal := 0.0
@@ -108,7 +108,7 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 
 	}
 
-	fPoints, fNames := tesselations.MakeFaces([4]float64{fVal, 0, 0, 0}, numberOfFaces, 3, matrices)
+	fPoints, fNames := tesselations.MakeFaces(vector.Vec4{fVal, 0, 0, 0}, numberOfFaces, 3, matrices)
 
 	v := tesselations.MakeRing(initialVerts, matrices, fNames)
 	e := tesselations.MakeRing(initialEdges, matrices, fNames)
@@ -125,17 +125,17 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 		NumFaces:        len(faceData),
 		FaceReflections: fNames,
 		OuterReflection: "d",
-		V:               [4]float64{0, 0, 0, 0},
-		E:               [4]float64{0, 0, 0, 0},
-		F:               [4]float64{0, 0, 0, 0},
-		C:               [4]float64{0, 0, 0, 0},
+		V:               vector.Vec4{0, 0, 0, 0},
+		E:               vector.Vec4{0, 0, 0, 0},
+		F:               vector.Vec4{0, 0, 0, 0},
+		C:               vector.Vec4{0, 0, 0, 0},
 		CellType:        "euclidean",
-		Vv:              vv,
+		VV:              vv,
 		MetricValues:    MetricValues{E: eVal, P: pVal},
 		Vertices:        v,
 		Edges:           edgeData,
 		Faces:           faceData,
 		Matrices:        matrices,
-		Flip:            func(v [4]float64) [4]float64 { return [4]float64{v[0], v[2], v[3], v[1]} },
+		Flip:            func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.Y, v.Z, v.X} },
 	}
 }

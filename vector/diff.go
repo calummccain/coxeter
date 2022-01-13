@@ -1,29 +1,5 @@
 package vector
 
-func Diff1(vec1, vec2 [1]float64) [1]float64 {
-
-	return [1]float64{vec1[0] - vec2[0]}
-
-}
-
-// func Diff2(vec1, vec2 [2]float64) [2]float64 {
-
-// 	return [2]float64{vec1[0] - vec2[0], vec1[1] - vec2[1]}
-
-// }
-
-// func Diff3(vec1, vec2 [3]float64) [3]float64 {
-
-// 	return [3]float64{vec1[0] - vec2[0], vec1[1] - vec2[1], vec1[2] - vec2[2]}
-
-// }
-
-// func Diff4(vec1, vec2 [4]float64) [4]float64 {
-
-// 	return [4]float64{vec1[0] - vec2[0], vec1[1] - vec2[1], vec1[2] - vec2[2], vec1[3] - vec2[3]}
-
-// }
-
 func Diff(vec1, vec2 []float64) []float64 {
 
 	d := make([]float64, 0, len(vec1))

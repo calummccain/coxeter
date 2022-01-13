@@ -36,20 +36,20 @@ func HyperbolicData(p, q int, r float64, numberOfFaces int) CellData {
 
 	metric := Boundaries(r, eVal, pVal)
 
-	cMat := func(v [4]float64) [4]float64 {
+	cMat := func(v vector.Vec4) vector.Vec4 {
 
 		r := sr*sr*sp*sp - cq*cq
 
-		return [4]float64{
-			(1.0-2.0*r/(sp*sp))*v[0] + (2.0*r*cr/(sp*cp*cq))*v[1] + (2.0*r/(cp*sp*sp))*v[2],
-			(2.0*cp*cq*cr/sp)*v[0] + (1.0-2.0*cr*cr)*v[1] - (2.0*cr*cq/sp)*v[2],
-			(2.0*cp*cq*cq/(sp*sp))*v[0] - (2.0*cr*cq/sp)*v[1] + (1.0-2.0*cq*cq/(sp*sp))*v[2],
-			v[3],
+		return vector.Vec4{
+			(1.0-2.0*r/(sp*sp))*v.W + (2.0*r*cr/(sp*cp*cq))*v.X + (2.0*r/(cp*sp*sp))*v.Y,
+			(2.0*cp*cq*cr/sp)*v.W + (1.0-2.0*cr*cr)*v.X - (2.0*cr*cq/sp)*v.Y,
+			(2.0*cp*cq*cq/(sp*sp))*v.W - (2.0*cr*cq/sp)*v.X + (1.0-2.0*cq*cq/(sp*sp))*v.Y,
+			v.Z,
 		}
 
 	}
 
-	var f func([4]float64) [4]float64
+	var f func(vector.Vec4) vector.Vec4
 	var a, b float64
 
 	if metric == 'e' {
@@ -68,26 +68,26 @@ func HyperbolicData(p, q int, r float64, numberOfFaces int) CellData {
 		b = math.Sqrt(math.Abs(sp*sp*sr*sr-cq*cq)) / den
 	}
 
-	f = func(v [4]float64) [4]float64 {
+	f = func(v vector.Vec4) vector.Vec4 {
 
-		return [4]float64{a * v[0], b * v[1], b * v[2], b * v[3]}
+		return vector.Vec4{a * v.W, b * v.X, b * v.Y, b * v.Z}
 
 	}
 
 	matrices := shared.Matrices{
-		A: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], v[2], -v[3]} },
-		B: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], cp2*v[2] + sp2*v[3], sp2*v[2] - cp2*v[3]} },
+		Amat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Y, -v.Z} },
+		Bmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, cp2*v.Y + sp2*v.Z, sp2*v.Y - cp2*v.Z} },
 		C: cMat,
-		D: func(v [4]float64) [4]float64 { return [4]float64{v[0], -v[1], v[2], v[3]} },
-		E: func(v [4]float64) [4]float64 { return v },
-		F: f,
+		Dmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, -v.X, v.Y, v.Z} },
+		Emat: func(v vector.Vec4) vector.Vec4 { return v },
+		Fmat: f,
 	}
 
-	initialVerts := [][4]float64{}
-	initialEdges := [][4]float64{}
+	initialVerts := []vector.Vec4{}
+	initialEdges := []vector.Vec4{}
 	for i := 0; i < p; i++ {
-		initialVerts = append(initialVerts, [4]float64{1.0, 0.0, math.Cos(math.Pi * float64(2*i+1) / float64(p)), math.Sin(math.Pi * float64(2*i+1) / float64(p))})
-		initialEdges = append(initialEdges, [4]float64{1.0, 0.0, cp * math.Cos(math.Pi*float64(2*i)/float64(p)), cp * math.Sin(math.Pi*float64(2*i)/float64(p))})
+		initialVerts = append(initialVerts, vector.Vec4{1.0, 0.0, math.Cos(math.Pi * float64(2*i+1) / float64(p)), math.Sin(math.Pi * float64(2*i+1) / float64(p))})
+		initialEdges = append(initialEdges, vector.Vec4{1.0, 0.0, cp * math.Cos(math.Pi*float64(2*i)/float64(p)), cp * math.Sin(math.Pi*float64(2*i)/float64(p))})
 		initialEdges[i] = vector.Scale4(initialEdges[i], 1.0/math.Sqrt(math.Abs(hyperbolic.HyperbolicNorm(f(initialEdges[i])))))
 	}
 
@@ -112,7 +112,7 @@ func HyperbolicData(p, q int, r float64, numberOfFaces int) CellData {
 
 	}
 
-	fPoints, fNames := tesselations.MakeFaces([4]float64{fVal, 0, 0, 0}, numberOfFaces, p, matrices)
+	fPoints, fNames := tesselations.MakeFaces(vector.Vec4{fVal, 0, 0, 0}, numberOfFaces, p, matrices)
 
 	v := tesselations.MakeRing(initialVerts, matrices, fNames)
 
@@ -131,17 +131,17 @@ func HyperbolicData(p, q int, r float64, numberOfFaces int) CellData {
 		NumFaces:        len(faceData),
 		FaceReflections: fNames,
 		OuterReflection: "d",
-		V:               [4]float64{0, 0, 0, 0},
-		E:               [4]float64{0, 0, 0, 0},
-		F:               [4]float64{0, 0, 0, 0},
-		C:               [4]float64{0, 0, 0, 0},
+		V:               vector.Vec4{0, 0, 0, 0},
+		E:               vector.Vec4{0, 0, 0, 0},
+		F:               vector.Vec4{0, 0, 0, 0},
+		C:               vector.Vec4{0, 0, 0, 0},
 		CellType:        "hyperbolic",
-		Vv:              vv,
+		VV:              vv,
 		MetricValues:    MetricValues{E: eVal, P: pVal},
 		Vertices:        v,
 		Edges:           edgeData,
 		Faces:           faceData,
 		Matrices:        matrices,
-		Flip:            func(v [4]float64) [4]float64 { return [4]float64{v[0], v[2], v[3], v[1]} },
+		Flip:            func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.Y, v.Z, v.X} },
 	}
 }
