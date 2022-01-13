@@ -14,6 +14,10 @@ type hPoint struct {
 	Norm float64
 }
 
+func initHPoint(w, x, y, z float64) hPoint {
+	return hPoint{H: vector.Vec4{w, x, y, z}}
+}
+
 func Scale3(p vector.Vec3, a float64) vector.Vec3 {
 	return vector.Vec3{p.X * a, p.Y * a, p.Z * a}
 }
