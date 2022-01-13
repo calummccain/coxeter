@@ -3,7 +3,7 @@ package data
 import (
 	"math"
 
-	"github.com/calummccain/coxeter/shared"
+	"github.com/calummccain/coxeter/vector"
 )
 
 func IcosahedronData(n float64) CellData {
@@ -17,49 +17,47 @@ func IcosahedronData(n float64) CellData {
 
 	metric := Boundaries(n, eVal, pVal)
 
-	var vv float64
+	cf := 3.0 * P2 * cot / (1 + cot)
+	ce := P4 * cot
+	fe := P2 * (1 + cot) / 3.0
+
+	var cv, fv, ev, vv float64
 
 	if metric == 'p' {
-
-		vv = 2 / (P + 2)
-
+		cv = 0.0
+		fv = 0.0
+		ev = 0.0
+		vv = 2.0 / (P + 2.0)
 	} else {
-
+		cv = P6 * cot / (1.0 + P2 - P4*cot)
+		fv = P4 * (1.0 + cot) / (3.0 * (1.0 + P2 - P4*cot))
+		ev = P2 / (1.0 + P2 - P4*cot)
 		vv = (P2 - 1.0 + P4*cot) / math.Abs(P2+1.0-P4*cot)
-
 	}
 
-	var d func([4]float64) [4]float64
+	var d func(vector.Vec4) vector.Vec4
 
 	if n == 3 {
-
-		d = func(v [4]float64) [4]float64 {
-
-			return [4]float64{
-				0.5 * ((P4-1.0)*v[0] - (P3-3.0*P_1)*v[2] - (P-3.0*P_3)*v[3]),
-				v[1],
-				0.5 * (P5*v[0] + (2.0-P4)*v[2] - P2*v[3]),
-				0.5 * (P3*v[0] - P2*v[2] + v[3]),
+		d = func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{
+				0.5 * ((P4-1.0)*v.W - (P3-3.0*P_1)*v.Y - (P-3.0*P_3)*v.Z),
+				v.X,
+				0.5 * (P5*v.W + (2.0-P4)*v.Y - P2*v.Z),
+				0.5 * (P3*v.W - P2*v.Y + v.Z),
 			}
-
 		}
-
 	} else {
-
-		d = func(v [4]float64) [4]float64 {
-
-			return [4]float64{
-				(6.0*P2*cos-1.0)*v[0] + (2.0*P_1-6.0*P*cos)*v[2] + (2.0*P_3-6.0*cos*P_1)*v[3],
-				v[1],
-				2.0*P5*cos*v[0] + (1.0-2.0*P4*cos)*v[2] - 2.0*P2*cos*v[3],
-				2.0*P3*cos*v[0] - 2.0*P2*cos*v[2] + (1.0-2.0*cos)*v[3],
+		d = func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{
+				(6.0*P2*cos-1.0)*v.W + (2.0*P_1-6.0*P*cos)*v.Y + (2.0*P_3-6.0*cos*P_1)*v.Z,
+				v.X,
+				2.0*P5*cos*v.W + (1.0-2.0*P4*cos)*v.Y - 2.0*P2*cos*v.Z,
+				2.0*P3*cos*v.W - 2.0*P2*cos*v.Y + (1.0-2.0*cos)*v.Z,
 			}
-
 		}
-
 	}
 
-	var f func([4]float64) [4]float64
+	var f func(vector.Vec4) vector.Vec4
 
 	f3_1 := P3 / 2.0
 	f3_2 := math.Sqrt(3.0*P-1.0) / 2.0
@@ -70,37 +68,21 @@ func IcosahedronData(n float64) CellData {
 	fn_2 := math.Sqrt(math.Abs((P4*cot - 1.0) / (P2 + 1.0 - P4*cot)))
 
 	if n == 3 {
-
-		f = func(v [4]float64) [4]float64 {
-
-			return [4]float64{f3_1 * v[0], f3_2 * v[1], f3_2 * v[2], f3_2 * v[3]}
-
+		f = func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{f3_1 * v.W, f3_2 * v.X, f3_2 * v.Y, f3_2 * v.Z}
 		}
-
 	} else if metric == 'e' {
-
-		f = func(v [4]float64) [4]float64 {
-
-			return [4]float64{v[0], v[1], v[2], v[3]}
-
+		f = func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{v.W, v.X, v.Y, v.Z}
 		}
-
 	} else if metric == 'p' {
-
-		f = func(v [4]float64) [4]float64 {
-
-			return [4]float64{v[0], fp * v[1], fp * v[2], fp * v[3]}
-
+		f = func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{v.W, fp * v.X, fp * v.Y, fp * v.Z}
 		}
-
 	} else {
-
-		f = func(v [4]float64) [4]float64 {
-
-			return [4]float64{fn_1 * v[0], fn_2 * v[1], fn_2 * v[2], fn_2 * v[3]}
-
+		f = func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{fn_1 * v.W, fn_2 * v.X, fn_2 * v.Y, fn_2 * v.Z}
 		}
-
 	}
 
 	return CellData{
@@ -115,14 +97,20 @@ func IcosahedronData(n float64) CellData {
 			"abacabacbc", "abcabacbc", "cabcabacbc",
 			"bacbc", "abacbc", "acabacbc", "cabacbc"},
 		OuterReflection: "d",
-		V:               [4]float64{1, 1, P, 0},
-		E:               [4]float64{1, 0, P, 0},
-		F:               [4]float64{3, 0, P3, P},
-		C:               [4]float64{1, 0, 0, 0},
+		V:               vector.Vec4{1, 1, P, 0},
+		E:               vector.Vec4{1, 0, P, 0},
+		F:               vector.Vec4{3, 0, P3, P},
+		C:               vector.Vec4{1, 0, 0, 0},
 		CellType:        "spherical",
-		Vv:              vv,
+		CF:              cf,
+		CE:              ce,
+		CV:              cv,
+		FE:              fe,
+		FV:              fv,
+		EV:              ev,
+		VV:              vv,
 		MetricValues:    MetricValues{E: eVal, P: pVal},
-		Vertices: [][4]float64{
+		Vertices: []vector.Vec4{
 			{1, 1, P, 0}, {1, 1, -P, 0}, {1, -1, P, 0},
 			{1, -1, -P, 0}, {1, P, 0, 1}, {1, -P, 0, 1},
 			{1, P, 0, -1}, {1, -P, 0, -1}, {1, 0, 1, P},
@@ -145,16 +133,13 @@ func IcosahedronData(n float64) CellData {
 			{2, 7, 9}, {3, 7, 5}, {3, 5, 10}, {3, 11, 7},
 			{4, 10, 8}, {5, 8, 10}, {6, 9, 11}, {7, 11, 9},
 		},
-		Matrices: shared.Matrices{
-			A: func(v [4]float64) [4]float64 { return [4]float64{v[0], -v[1], v[2], v[3]} },
-			B: func(v [4]float64) [4]float64 {
-				return [4]float64{v[0], 0.5 * (v[1] + P_1*v[2] - P*v[3]), 0.5 * (P_1*v[1] + P*v[2] + v[3]), 0.5 * (-P*v[1] + v[2] - P_1*v[3])}
-			},
-			C: func(v [4]float64) [4]float64 { return [4]float64{v[0], v[1], v[2], -v[3]} },
-			D: d,
-			E: func(v [4]float64) [4]float64 { return v },
-			F: f,
+		Amat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, -v.X, v.Y, v.Z} },
+		Bmat: func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{v.W, 0.5 * (v.X + P_1*v.Y - P*v.Z), 0.5 * (P_1*v.X + P*v.Y + v.Z), 0.5 * (-P*v.X + v.Y - P_1*v.Z)}
 		},
-		Flip: func(v [4]float64) [4]float64 { return [4]float64{-v[0], v[1], v[2], v[3]} },
+		Cmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Y, -v.Z} },
+		Dmat: d,
+		Emat: func(v vector.Vec4) vector.Vec4 { return v },
+		Fmat: f,
 	}
 }
