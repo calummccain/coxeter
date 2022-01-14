@@ -2,37 +2,35 @@ package tesselations
 
 import (
 	"github.com/calummccain/coxeter/vector"
-
-	"github.com/calummccain/coxeter/shared"
 )
 
-func MakeCells(cell [4]float64, faceReflections []string, numLayers int, matrixDict shared.Matrices) ([][4]float64, []string) {
+func MakeCells(cell vector.Vec4, faceReflections []string, numLayers int, A, B, C, D, E, F func(vector.Vec4) vector.Vec4) ([]vector.Vec4, []string) {
 
-	cells := [][4]float64{}
+	cells := []vector.Vec4{}
 	cellNames := []string{}
 
-	outerLayer := [][4]float64{cell}
+	outerLayer := []vector.Vec4{cell}
 	outerNames := []string{""}
 
-	var newLayer [][4]float64
+	var newLayer []vector.Vec4
 	var newNames []string
 
-	var testCenters [][4]float64
+	var testCenters []vector.Vec4
 
 	i := 1
 
 	for i <= numLayers {
 
-		newLayer = [][4]float64{}
+		newLayer = []vector.Vec4{}
 		newNames = []string{}
 
 		for j := 0; j < len(faceReflections); j++ {
 
-			testCenters = vector.TransformVertices(outerLayer, faceReflections[j]+"d", matrixDict)
+			testCenters = vector.TransformVertices(outerLayer, faceReflections[j]+"d", A, B, C, D, E, F)
 
 			for k := 0; k < len(testCenters); k++ {
 
-				if !(vector.IsInArray(testCenters[k], cells) || vector.IsInArray(testCenters[k], outerLayer) || vector.IsInArray(testCenters[k], newLayer)) {
+				if !(vector.IsInArray4(testCenters[k], cells) || vector.IsInArray4(testCenters[k], outerLayer) || vector.IsInArray4(testCenters[k], newLayer)) {
 
 					newLayer = append(newLayer, testCenters[k])
 

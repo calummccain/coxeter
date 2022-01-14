@@ -4,9 +4,10 @@ import (
 	"math"
 
 	"github.com/calummccain/coxeter/hyperbolic"
+	"github.com/calummccain/coxeter/vector"
 )
 
-func GenerateFaceData(fvDist float64, numEdges int, f [][4]float64, v [][4]float64, fmat func([4]float64) [4]float64) [][]int {
+func GenerateFaceData(fv float64, numEdges int, f []vector.Vec4, v []vector.Vec4, fmat func(vector.Vec4) vector.Vec4) [][]int {
 
 	faceData := [][]int{}
 	var nearestPoints []int
@@ -27,7 +28,7 @@ func GenerateFaceData(fvDist float64, numEdges int, f [][4]float64, v [][4]float
 
 			}
 
-			if math.Abs(math.Pow(hyperbolic.HyperboloidInnerProduct(fmat(v[j]), fmat(f[i])), 2)-fvDist) < eps {
+			if math.Abs(math.Pow(hyperbolic.HyperboloidInnerProduct(fmat(v[j]), fmat(f[i])), 2)-fv) < eps {
 
 				nearestPoints = append(nearestPoints, j)
 				k++

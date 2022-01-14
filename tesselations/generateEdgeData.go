@@ -4,9 +4,11 @@ import (
 	"math"
 
 	"github.com/calummccain/coxeter/hyperbolic"
+	"github.com/calummccain/coxeter/vector"
 )
 
-func GenerateEdgeData(evDist float64, e, v [][4]float64, fmat func([4]float64) [4]float64) [][2]int {
+// Only works for hyperbolic cells (no need to do for spherical or euclidean)
+func GenerateEdgeData(ev float64, e, v []vector.Vec4, fmat func(vector.Vec4) vector.Vec4) [][2]int {
 
 	edgeData := [][2]int{}
 	var nearestPoints [2]int
@@ -27,7 +29,7 @@ func GenerateEdgeData(evDist float64, e, v [][4]float64, fmat func([4]float64) [
 
 			}
 
-			if math.Abs(math.Pow(hyperbolic.HyperboloidInnerProduct(fmat(v[j]), fmat(e[i])), 2)-evDist) < eps {
+			if math.Abs(math.Pow(hyperbolic.HyperboloidInnerProduct(fmat(v[j]), fmat(e[i])), 2)-ev) < eps {
 
 				nearestPoints[k] = j
 				k++
