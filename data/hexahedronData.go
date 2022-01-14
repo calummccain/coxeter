@@ -120,25 +120,17 @@ func HexahedronData(n float64) CellData {
 		b = 1
 
 	} else if n == 5 {
-
 		a = P2 * Rt_2
 		b = math.Sqrt(0.5 * P)
-
 	} else if n == 6 {
-
 		a = Rt3
 		b = 1
-
 	} else if metric == 'p' {
-
 		a = 1
 		b = 1
-
 	} else {
-
 		a = math.Sqrt(math.Abs(2.0 * cot / (3.0 - cot)))
 		b = math.Sqrt(math.Abs((cot - 1.0) / (3.0 - cot)))
-
 	}
 
 	f = func(v vector.Vec4) vector.Vec4 {
@@ -182,7 +174,6 @@ func HexahedronData(n float64) CellData {
 			{0, 1, 2, 3}, {4, 7, 3, 0}, {7, 6, 2, 3},
 			{4, 5, 6, 7}, {0, 1, 5, 4}, {1, 2, 6, 5},
 		},
-
 		Amat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Y, -v.Z} },
 		Bmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Z, v.Y} },
 		Cmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.Y, v.X, v.Z} },
