@@ -3,8 +3,6 @@ package data
 import (
 	"math"
 
-	"github.com/calummccain/coxeter/hyperbolic"
-	"github.com/calummccain/coxeter/shared"
 	"github.com/calummccain/coxeter/tesselations"
 	"github.com/calummccain/coxeter/vector"
 )
@@ -20,63 +18,15 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 
 	metric := Boundaries(n, eVal, pVal)
 
-	var vv float64
-
-	if metric == 'p' {
-
-		vv = 1.5
-
-	} else {
-
-		vv = (1.0 + 2.0*cos) / math.Abs(1.0-4.0*cos)
-
-	}
-
-	cMat := func(v vector.Vec4) vector.Vec4 {
-
-		return vector.Vec4{
-			(1.0+2.0*cos)*v.W - 2.0*(cos*cos)*v.X - cos*v.Y - 3.0*cos*v.Z,
-			2.0*v.W + (1.0-2.0*cos)*v.X - v.Y - 3.0*v.Z,
-			v.W - cos*v.X + 0.5*v.Y - 1.5*v.Z,
-			v.W - cos*v.X - 0.5*v.Y - 0.5*v.Z,
-		}
-
-	}
-
 	var f func(vector.Vec4) vector.Vec4
-	var a, b, c, d float64
-
 	if metric == 'p' {
-
-		a = 1.0
-		b = 0.25
-		c = 0.5
-		d = 0.5 * Rt3
-
+		f = func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{4.0 * v.W, v.X, 2.0 * v.Y, 2.0 * Rt3 * v.Z}
+		}
 	} else {
-
-		a = 1.0 / den
-		b = cos / den
-		c = math.Sqrt(cos) / den
-		d = Rt3 * c
-
-	}
-
-	f = func(v vector.Vec4) vector.Vec4 {
-
-		return vector.Vec4{a * v.W, b * v.X, c * v.Y, d * v.Z}
-
-	}
-
-	matrices := shared.Matrices{
-		Amat: func(v vector.Vec4) vector.Vec4 {
-			return vector.Vec4{v.W, v.X, -0.5*v.Y + 1.5*v.Z, 0.5 * (v.Y + v.Z)}
-		},
-		Bmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Y, -v.Z} },
-		C: cMat,
-		Dmat: func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, -v.X, v.Y, v.Z} },
-		Emat: func(v vector.Vec4) vector.Vec4 { return v },
-		Fmat: f,
+		f = func(v vector.Vec4) vector.Vec4 {
+			return vector.Vec4{v.W / den, cos * v.X / den, math.Sqrt(cos) * v.Y / den, Rt3 * math.Sqrt(cos) * v.Z / den}
+		}
 	}
 
 	initialVerts := []vector.Vec4{
@@ -86,37 +36,56 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 	}
 
 	initialEdges := []vector.Vec4{
-		vector.Scale4(vector.Vec4{2, 0, 1, -1}, 1.0/math.Sqrt(math.Abs(hyperbolic.HyperbolicNorm(f(vector.Vec4{2, 0, 1, -1}))))),
-		vector.Scale4(vector.Vec4{2, 0, 1, 1}, 1.0/math.Sqrt(math.Abs(hyperbolic.HyperbolicNorm(f(vector.Vec4{2, 0, 1, 1}))))),
-		vector.Scale4(vector.Vec4{1, 0, -1, 0}, 1.0/math.Sqrt(math.Abs(hyperbolic.HyperbolicNorm(f(vector.Vec4{1, 0, -1, 0}))))),
+		{2, 0, 1, -1},
+		{2, 0, 1, 1},
+		{1, 0, -1, 0},
+	}
+
+	for _, edge := range initialEdges {
+		edge.Scale(Rt_2 / math.Sin(math.Pi/n))
 	}
 
 	fVal := 0.0
-	ev := 0.0
-	fv := 0.0
+	fe := 1.0 - cos
+	var fv, ev, vv float64
 	if metric == 'p' {
-
 		fVal = 1.0
-		ev = 0.75
+		vv = 0.5
+		ev = 0.25
 		fv = 1.0
-
 	} else {
-
 		fVal = den
+		vv = (1.0 - 2.0*cos/3.0) / math.Abs(1.0-4.0*cos)
 		ev = (1.0 - cos) / (1.0 - 4.0*cos)
 		fv = 1.0 / (1.0 - 4.0*cos)
-
 	}
 
-	fPoints, fNames := tesselations.MakeFaces(vector.Vec4{fVal, 0, 0, 0}, numberOfFaces, 3, matrices)
+	Amat := func(v vector.Vec4) vector.Vec4 {
+		return vector.Vec4{v.W, v.X, -v.Y + 3.0*v.Z, v.Y + v.Z}
+	}
+	Bmat := func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.X, v.Y, -v.Z} }
+	Cmat := func(v vector.Vec4) vector.Vec4 {
+		return vector.Vec4{
+			(1.0+2.0*cos)*v.W - 2.0*cos*cos*v.X - cos*v.Y - 3.0*cos*v.Z,
+			2.0*v.W + (1.0-2.0*cos)*v.X - v.Y - 3.0*v.Z,
+			v.W - cos*v.X - 0.5*v.Y - 1.5*v.Z,
+			v.W - cos*v.X - 0.5*v.Y - 0.5*v.Z,
+		}
+	}
+	Dmat := func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, -v.X, v.Y, v.Z} }
+	Emat := func(v vector.Vec4) vector.Vec4 { return v }
+	Fmat := f
 
-	v := tesselations.MakeRing(initialVerts, matrices, fNames)
-	e := tesselations.MakeRing(initialEdges, matrices, fNames)
+	fPoints, fNames := tesselations.MakeFaces(vector.Vec4{fVal, 0, 0, 0}, numberOfFaces, 4, Amat, Bmat, Cmat, Dmat, Emat, Fmat)
 
-	faceData := tesselations.GenerateFaceData(math.Abs(fv), 3, fPoints, v, f)
+	v := tesselations.MakeRing(initialVerts, Amat, Bmat, Cmat, Dmat, Emat, Fmat, fNames)
+	e := tesselations.MakeRing(initialEdges, Amat, Bmat, Cmat, Dmat, Emat, Fmat, fNames)
+
+	faceData := tesselations.GenerateFaceData(math.Abs(fv), 4, fPoints, v, f)
 
 	edgeData := tesselations.GenerateEdgeData(math.Abs(ev), e, v, f)
-	faceData = tesselations.OrderFaces(3, faceData, edgeData)
+
+	faceData = tesselations.OrderFaces(6, faceData, edgeData)
 
 	return CellData{
 		Metric:          metric,
@@ -125,17 +94,27 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 		NumFaces:        len(faceData),
 		FaceReflections: fNames,
 		OuterReflection: "d",
-		V:               vector.Vec4{0, 0, 0, 0},
-		E:               vector.Vec4{0, 0, 0, 0},
-		F:               vector.Vec4{0, 0, 0, 0},
-		C:               vector.Vec4{0, 0, 0, 0},
+		V:               vector.Vec4{1, 0, 2, 0},
+		E:               vector.Vec4{2, 0, 1, 1},
+		F:               vector.Vec4{1, 0, 0, 0},
+		C:               vector.Vec4{cos, 1, 0, 0},
 		CellType:        "euclidean",
+		CF:              math.Inf(1),
+		CE:              math.Inf(1),
+		CV:              math.Inf(1),
+		FE:              fe,
+		FV:              fv,
+		EV:              ev,
 		VV:              vv,
 		MetricValues:    MetricValues{E: eVal, P: pVal},
 		Vertices:        v,
 		Edges:           edgeData,
 		Faces:           faceData,
-		Matrices:        matrices,
-		Flip:            func(v vector.Vec4) vector.Vec4 { return vector.Vec4{v.W, v.Y, v.Z, v.X} },
+		Amat:            Amat,
+		Bmat:            Bmat,
+		Cmat:            Cmat,
+		Dmat:            Dmat,
+		Emat:            Emat,
+		Fmat:            Fmat,
 	}
 }
