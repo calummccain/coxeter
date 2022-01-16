@@ -97,7 +97,7 @@ func DodecahedronData(n float64) CellData {
 		}
 	} else if n == 5 {
 		f = func(v vector.Vec4) vector.Vec4 {
-			return vector.Vec4{W: P4 * 0.5 * v.W, X: P * 0.5 * math.Sqrt(4*P-1) * v.X, Y: P * 0.5 * math.Sqrt(4*P-1) * v.Y, Z: P * 0.5 * math.Sqrt(4*P-1) * v.Z}
+			return vector.Vec4{W: P4 * 0.5 * v.W, X: 0.5 * math.Sqrt(4*P-1) * v.X, Y: 0.5 * math.Sqrt(4*P-1) * v.Y, Z: 0.5 * math.Sqrt(4*P-1) * v.Z}
 		}
 	} else if n == 6 {
 		f = func(v vector.Vec4) vector.Vec4 {
@@ -122,7 +122,7 @@ func DodecahedronData(n float64) CellData {
 		innerProd = func(a, b vector.Vec4) float64 { return (P4*a.W*b.W - P*(a.X*b.X+a.Y*b.Y+a.Z*b.Z)) / 2.0 }
 	} else if n == 5 {
 		innerProd = func(a, b vector.Vec4) float64 {
-			return (P8*a.W*b.W - P2*(4.0*P-1.0)*(a.X*b.X+a.Y*b.Y+a.Z*b.Z)) / (4 * P2)
+			return (P8*a.W*b.W - P2*(4.0*P-1.0)*(a.X*b.X+a.Y*b.Y+a.Z*b.Z)) / 4
 		}
 	} else if n == 6 {
 		innerProd = func(a, b vector.Vec4) float64 { return 3.0*a.W*b.W - a.X*b.X - a.Y*b.Y - a.Z*b.Z }
@@ -137,9 +137,9 @@ func DodecahedronData(n float64) CellData {
 	F := vector.Vec4{W: 3 - P, X: P, Y: 0, Z: 1}
 	C := vector.Vec4{W: 1, X: 0, Y: 0, Z: 0}
 	CFE := vector.Vec4{W: 0, X: 0, Y: 1, Z: 0}
-	CFV := vector.Vec4{W: 0, X: 1, Y: -P2, Z: P}
+	CFV := vector.Vec4{W: 0, X: 1, Y: -P2, Z: -P}
 	CEV := vector.Vec4{W: 0, X: 0, Y: 0, Z: 1}
-	FEV := vector.Vec4{W: P4*cot - 1.0, X: 0, Y: P5, Z: P3}
+	FEV := vector.Vec4{W: P2*cot - 1.0, X: P3 * cot, Y: 0, Z: P2 * cot}
 
 	for _, vec := range []vector.Vec4{E, F, C, CFE, CFV, CEV, FEV} {
 		vec.Scale(1.0 / math.Sqrt(math.Abs(innerProd(vec, vec))))
