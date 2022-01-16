@@ -92,9 +92,9 @@ func IcosahedronData(n float64) CellData {
 	F := vector.Vec4{W: 3, X: 0, Y: P3, Z: P}
 	C := vector.Vec4{W: 1, X: 0, Y: 0, Z: 0}
 	CFE := vector.Vec4{W: 0, X: 1, Y: 0, Z: 0}
-	CFV := vector.Vec4{W: 0, X: P, Y: -1, Z: P_1}
+	CFV := vector.Vec4{W: 0, X: P, Y: -1, Z: P2}
 	CEV := vector.Vec4{W: 0, X: 0, Y: 0, Z: 1}
-	FEV := vector.Vec4{W: P*cot - P_3, X: 0, Y: P2, Z: 1}
+	FEV := vector.Vec4{W: P*cot - P_3, X: 0, Y: P2 * cot, Z: cot}
 
 	for _, vec := range []vector.Vec4{E, F, C, CFE, CFV, CEV, FEV} {
 		vec.Scale(1.0 / math.Sqrt(math.Abs(innerProd(vec, vec))))
