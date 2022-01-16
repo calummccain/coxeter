@@ -7,11 +7,11 @@ import (
 	"github.com/calummccain/coxeter/vector"
 )
 
-func TestTetrahedron(t *testing.T) {
+func TestHexahedron(t *testing.T) {
 
 	for i := 3; i <= 20; i++ {
 
-		data := TetrahedronData(float64(i))
+		data := HexahedronData(float64(i))
 
 		// Test reflection matrices fix correct vertices of Goursat tetrahedron
 		if vector.DistanceSquared4(data.Amat(data.C), data.C) > TestEps {
