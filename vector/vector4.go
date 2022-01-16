@@ -13,6 +13,10 @@ func (v *Vec4) NormSquared() float64 {
 	return v.W*v.W + v.X*v.X + v.Y*v.Y + v.Z*v.Z
 }
 
+func (v *Vec4) HNormSquared() float64 {
+	return v.W*v.W - v.X*v.X - v.Y*v.Y - v.Z*v.Z
+}
+
 func (v *Vec4) Scale(a float64) {
 	v.W *= a
 	v.X *= a
@@ -40,6 +44,14 @@ func (v *Vec4) ToSlice() [4]float64 {
 
 func (v *Vec4) Normalise() {
 	v.Scale(1 / math.Sqrt(v.NormSquared()))
+}
+
+func (v *Vec4) SNormalise() {
+	v.Scale(1 / math.Sqrt(v.NormSquared()))
+}
+
+func (v *Vec4) HNormalise() {
+	v.Scale(1 / math.Sqrt(math.Abs(v.HNormSquared())))
 }
 
 func (v *Vec4) Dot(w Vec4) float64 {
