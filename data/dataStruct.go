@@ -47,10 +47,20 @@ type CellData struct {
 
 func (cellData *CellData) DistanceSquared(a, b vector.Vec4) float64 {
 
-	if cellData.Metric == 'p' {
-		return math.Pow(cellData.InnerProduct(a, b), 2.0)
+	den := 1.0
+
+	if math.Abs(cellData.InnerProduct(a, a)) < DistanceSquaredEps {
+		den *= a.W
 	} else {
-		return math.Pow(cellData.InnerProduct(a, b), 2.0) / (cellData.InnerProduct(a, a) * cellData.InnerProduct(b, b))
+		den *= cellData.InnerProduct(a, a)
 	}
+
+	if math.Abs(cellData.InnerProduct(b, b)) < DistanceSquaredEps {
+		den *= b.W
+	} else {
+		den *= cellData.InnerProduct(b, b)
+	}
+
+	return math.Pow(cellData.InnerProduct(a, b), 2.0) / den
 
 }

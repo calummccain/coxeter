@@ -29,6 +29,11 @@ func HexahedronData(n float64) CellData {
 		fv = 0.0
 		ev = 0.0
 		vv = 2.0
+	} else if metric == 'e' {
+		cv = 0.0
+		fv = 0.0
+		ev = 0.0
+		vv = 2.0
 	} else {
 		cv = 2.0 * cot / (3.0 - cot)
 		fv = (1.0 + cot) / (3.0 - cot)

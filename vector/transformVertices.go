@@ -1,6 +1,6 @@
 package vector
 
-func TransformVertices(baseVertices []Vec4, transformation string, A, B, C, D, E, F func(Vec4) Vec4) []Vec4 {
+func TransformVertices(baseVertices []Vec4, transformation string, A, B, C, D func(Vec4) Vec4) []Vec4 {
 
 	newVertices := []Vec4{}
 	e1 := Vec4{1, 0, 0, 0}
@@ -13,8 +13,6 @@ func TransformVertices(baseVertices []Vec4, transformation string, A, B, C, D, E
 		'b': B,
 		'c': C,
 		'd': D,
-		'e': E,
-		'f': F,
 	}
 
 	if transformation != "" {
