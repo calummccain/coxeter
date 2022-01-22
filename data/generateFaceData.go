@@ -21,7 +21,7 @@ func (cellData *CellData) GenerateFaceData(faces []vector.Vec4) {
 
 		for j := 0; j < len(cellData.Vertices); j++ {
 
-			if k == int(cellData.P) {
+			if k == int(cellData.R) {
 
 				break
 

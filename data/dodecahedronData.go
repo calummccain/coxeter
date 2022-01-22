@@ -25,10 +25,10 @@ func DodecahedronData(n float64) CellData {
 
 	var cv, fv, ev, vv float64
 	if metric == 'p' {
-		cv = 3.0
-		fv = 4.0 * (3.0 - P) / 5.0
-		ev = P_2
-		vv = 2.0 * P_2
+		cv = 1.0
+		fv = 4.0 / (3.0 * P4 * (7.0 - 4.0*P))
+		ev = P_2 / 3.0
+		vv = 2.0 * P_2 / 3.0
 	} else {
 		cv = P4 * cot / (3.0 - cot)
 		fv = P4 * (1.0 + cot) / ((P + 2) * (3.0 - cot))
@@ -140,21 +140,6 @@ func DodecahedronData(n float64) CellData {
 	CFV := vector.Vec4{W: 0, X: 1, Y: -P2, Z: -P}
 	CEV := vector.Vec4{W: 0, X: 0, Y: 0, Z: 1}
 	FEV := vector.Vec4{W: P2*cot - 1.0, X: P3 * cot, Y: 0, Z: P2 * cot}
-
-	// for _, vec := range []vector.Vec4{E, F, C, CFE, CFV, CEV, FEV} {
-	// 	vec.Scale(1.0 / math.Sqrt(math.Abs(innerProd(vec, vec))))
-	// }
-
-	// if metric != 'p' {
-	// 	V.Scale(1.0 / math.Sqrt(math.Abs(innerProd(V, V))))
-	// }
-	// E.Scale(1.0 / math.Sqrt(math.Abs(innerProd(E, E))))
-	// F.Scale(1.0 / math.Sqrt(math.Abs(innerProd(F, F))))
-	// C.Scale(1.0 / math.Sqrt(math.Abs(innerProd(C, C))))
-	// CFE.Scale(1.0 / math.Sqrt(math.Abs(innerProd(CFE, CFE))))
-	// CFV.Scale(1.0 / math.Sqrt(math.Abs(innerProd(CFV, CFV))))
-	// CEV.Scale(1.0 / math.Sqrt(math.Abs(innerProd(CEV, CEV))))
-	// FEV.Scale(1.0 / math.Sqrt(math.Abs(innerProd(FEV, FEV))))
 
 	Vertices := []vector.Vec4{
 		{W: 1, X: 1, Y: 1, Z: 1}, {W: 1, X: 1, Y: 1, Z: -1}, {W: 1, X: 1, Y: -1, Z: 1}, {W: 1, X: 1, Y: -1, Z: -1},

@@ -24,8 +24,8 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 	var cv, fv, ev, vv float64
 	if metric == 'p' {
 		vv = 8
-		ev = 4
-		fv = 16
+		ev = 0.25
+		fv = 1.0
 		cv = 0.0
 	} else {
 		vv = (1.0 - 2.0*cos/3.0) / (1.0 - 4.0*cos/3.0)
@@ -95,7 +95,7 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 	C := vector.Vec4{W: cos, X: 1, Y: 0, Z: 0}
 	CFE := vector.Vec4{W: 0, X: 0, Y: 1, Z: -1}
 	CFV := vector.Vec4{W: 0, X: 0, Y: 0, Z: 1}
-	CEV := vector.Vec4{W: 2 * cos, X: 2, Y: -3, Z: -1}
+	CEV := vector.Vec4{W: 2 * cos, X: 2, Y: 3, Z: 1}
 	FEV := vector.Vec4{W: 0, X: 1, Y: 0, Z: 0}
 
 	initialData := CellData{

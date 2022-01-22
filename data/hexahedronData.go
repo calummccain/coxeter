@@ -145,21 +145,6 @@ func HexahedronData(n float64) CellData {
 	CEV := vector.Vec4{W: 0, X: 1, Y: -1, Z: 0}
 	FEV := vector.Vec4{W: cot - 1.0, X: 2.0 * cot, Y: 0, Z: 0}
 
-	for _, vec := range []vector.Vec4{E, F, C, CFE, CFV, CEV, FEV} {
-		vec.Scale(1.0 / math.Sqrt(math.Abs(innerProd(vec, vec))))
-	}
-
-	if metric != 'p' {
-		V.Scale(1.0 / math.Sqrt(math.Abs(innerProd(V, V))))
-	}
-	E.Scale(1.0 / math.Sqrt(math.Abs(innerProd(E, E))))
-	F.Scale(1.0 / math.Sqrt(math.Abs(innerProd(F, F))))
-	C.Scale(1.0 / math.Sqrt(math.Abs(innerProd(C, C))))
-	CFE.Scale(1.0 / math.Sqrt(math.Abs(innerProd(CFE, CFE))))
-	CFV.Scale(1.0 / math.Sqrt(math.Abs(innerProd(CFV, CFV))))
-	CEV.Scale(1.0 / math.Sqrt(math.Abs(innerProd(CEV, CEV))))
-	FEV.Scale(1.0 / math.Sqrt(math.Abs(innerProd(FEV, FEV))))
-
 	Vertices := []vector.Vec4{
 		{W: 1, X: 1, Y: 1, Z: 1}, {W: 1, X: 1, Y: -1, Z: 1},
 		{W: 1, X: -1, Y: -1, Z: 1}, {W: 1, X: -1, Y: 1, Z: 1},

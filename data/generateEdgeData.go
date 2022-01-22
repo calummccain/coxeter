@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/calummccain/coxeter/vector"
@@ -14,6 +15,8 @@ func (cellData *CellData) GenerateEdgeData(edges []vector.Vec4) {
 	var k int
 
 	eps := GenerateEdgeDataEps
+
+	fmt.Println(cellData.R, cellData.DistanceSquared(cellData.Vertices[0], edges[0]), cellData.EV)
 
 	for i := 0; i < len(edges); i++ {
 
