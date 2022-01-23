@@ -1,7 +1,6 @@
 package data
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/calummccain/coxeter/vector"
@@ -27,12 +26,6 @@ func (cellData *CellData) GenerateFaceData(faces []vector.Vec4) {
 				break
 
 			}
-
-			//v := cellData.Fmat(cellData.Vertices[j])
-			//v.Scale(1.0 / v.W)
-			//fmt.Println(v)
-
-			fmt.Println(cellData.Vertices[j], cellData.InnerProduct(cellData.Vertices[j], cellData.Vertices[j]), faces[i], cellData.InnerProduct(faces[i], faces[i]), cellData.InnerProduct(cellData.Vertices[j], faces[i]), cellData.DistanceSquared(cellData.Vertices[j], faces[i]))
 
 			if math.Abs(cellData.DistanceSquared(cellData.Vertices[j], faces[i])-cellData.FV) < eps {
 

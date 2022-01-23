@@ -1,7 +1,6 @@
 package data
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/calummccain/coxeter/vector"
@@ -24,8 +23,8 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 	var cv, fv, ev, vv, ce float64
 	if metric == 'p' {
 		vv = 8
-		ev = 0.25
-		fv = 1.0
+		ev = 4.0
+		fv = 16.0
 		cv = 0.75
 		ce = 4.0
 	} else {
@@ -100,8 +99,6 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 	CEV := vector.Vec4{W: 2 * cos, X: 2, Y: 3, Z: 1}
 	FEV := vector.Vec4{W: 0, X: 1, Y: 0, Z: 0}
 
-	fmt.Println(Cmat(F), Cmat(V), innerProd(Cmat(F), Cmat(V)))
-
 	initialData := CellData{
 		P:               6,
 		Q:               3,
@@ -143,24 +140,13 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 
 	fPoints := initialData.MakeFaces(numberOfFaces)
 
-	fmt.Println(initialData.FaceReflections)
-	fmt.Println(fPoints)
-
 	initialData.Vertices = initialData.MakeRing(initialVerts)
-
-	fmt.Println(initialData.Vertices)
 
 	edges := initialData.MakeRing(initialEdges)
 
-	fmt.Println(len(edges))
-
 	initialData.GenerateFaceData(fPoints)
 
-	fmt.Println(initialData.Faces)
-
 	initialData.GenerateEdgeData(edges)
-
-	fmt.Println(initialData.Edges)
 
 	initialData.OrderFaces()
 

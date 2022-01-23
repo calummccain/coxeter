@@ -28,7 +28,7 @@ func DodecahedronData(n float64) CellData {
 		cv = 1.0
 		fv = 4.0 / (3.0 * P4 * (7.0 - 4.0*P))
 		ev = P_2 / 3.0
-		vv = 2.0 * P_2 / 3.0
+		vv = 2.0 * P_2
 	} else {
 		cv = P4 * cot / (3.0 - cot)
 		fv = P4 * (1.0 + cot) / ((P + 2) * (3.0 - cot))
