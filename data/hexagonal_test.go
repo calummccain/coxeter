@@ -6,9 +6,9 @@ import (
 
 func TestHexagonal(t *testing.T) {
 
-	for i := 3; i <= 20; i++ {
-
-		DataTest(HexagonalData(float64(i), 7), t)
+	for i := 6; i <= 6; i++ {
+		data := HexagonalData(float64(i), 7)
+		DataTest(data, t)
 
 	}
 }

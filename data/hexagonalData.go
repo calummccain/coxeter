@@ -21,17 +21,19 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 
 	// Goursat tetrahedron side lengths
 	fe := 1.0 / (1.0 - cos)
-	var cv, fv, ev, vv float64
+	var cv, fv, ev, vv, ce float64
 	if metric == 'p' {
 		vv = 8
 		ev = 0.25
 		fv = 1.0
-		cv = 0.0
+		cv = 0.75
+		ce = 4.0
 	} else {
 		vv = (1.0 - 2.0*cos/3.0) / (1.0 - 4.0*cos/3.0)
 		ev = (1.0 - cos) / (1.0 - 4.0*cos/3.0)
 		fv = 1.0 / (1.0 - 4.0*cos/3.0)
-		cv = cos / (1.0 - 4.0*cos/3.0)
+		cv = 1.0 / (1.0 - 4.0*cos/3.0)
+		ce = 1.0 / (1.0 - cos)
 	}
 
 	initialVerts := []vector.Vec4{
@@ -54,9 +56,9 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 
 	//metric
 	var f func(vector.Vec4) vector.Vec4
-	if n == pVal {
+	if metric == 'p' {
 		f = func(v vector.Vec4) vector.Vec4 {
-			return vector.Vec4{W: 4.0 * v.W, X: 3.0 * v.X, Y: 2.0 * v.Y, Z: 2.0 * Rt_3 * v.Z}
+			return vector.Vec4{W: 4.0 * v.W, X: 3.0 * v.X, Y: 2.0 * v.Y, Z: 2.0 * Rt3 * v.Z}
 		}
 	} else {
 		f = func(v vector.Vec4) vector.Vec4 {
@@ -98,6 +100,8 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 	CEV := vector.Vec4{W: 2 * cos, X: 2, Y: 3, Z: 1}
 	FEV := vector.Vec4{W: 0, X: 1, Y: 0, Z: 0}
 
+	fmt.Println(Cmat(F), Cmat(V), innerProd(Cmat(F), Cmat(V)))
+
 	initialData := CellData{
 		P:               6,
 		Q:               3,
@@ -117,8 +121,8 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 		CFV:             CFV,
 		CEV:             CEV,
 		FEV:             FEV,
-		CF:              cos,
-		CE:              cos / (1.0 - cos),
+		CF:              1.0,
+		CE:              ce,
 		CV:              cv,
 		FE:              fe,
 		FV:              fv,
@@ -139,33 +143,24 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 
 	fPoints := initialData.MakeFaces(numberOfFaces)
 
-	if metric == 'p' {
-		fmt.Println(fPoints)
-	}
+	fmt.Println(initialData.FaceReflections)
+	fmt.Println(fPoints)
 
 	initialData.Vertices = initialData.MakeRing(initialVerts)
 
-	if metric == 'p' {
-		fmt.Println(initialData.Vertices)
-	}
+	fmt.Println(initialData.Vertices)
 
 	edges := initialData.MakeRing(initialEdges)
 
-	if metric == 'p' {
-		fmt.Println(edges)
-	}
+	fmt.Println(len(edges))
 
 	initialData.GenerateFaceData(fPoints)
 
-	if metric == 'p' {
-		fmt.Println(initialData.Faces)
-	}
+	fmt.Println(initialData.Faces)
 
 	initialData.GenerateEdgeData(edges)
 
-	if metric == 'p' {
-		fmt.Println(initialData.Edges)
-	}
+	fmt.Println(initialData.Edges)
 
 	initialData.OrderFaces()
 

@@ -141,7 +141,8 @@ func TruncatedHexahedronData(n float64) CellData {
 		C:               vector.Vec4{1, 0, 0, 0},
 		CellType:        "spherical",
 		VV:              vv,
-		MetricValues:    MetricValues{E: eVal, P: pVal},
+		EVal:            eVal,
+		PVal:            pVal,
 		Vertices: []vector.Vec4{
 			{1, 1, 1, factor}, {1, 1, factor, 1}, {1, factor, 1, 1},
 			{1, 1, 1, -factor}, {1, 1, factor, -1}, {1, factor, 1, -1},

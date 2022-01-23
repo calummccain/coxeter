@@ -114,7 +114,8 @@ func TruncatedOctahedronData(n float64) CellData {
 		C:               vector.Vec4{0, 0, 0, 0},
 		CellType:        "spherical",
 		VV:              vv,
-		MetricValues:    MetricValues{E: eVal, P: pVal},
+		EVal:            eVal,
+		PVal:            pVal,
 		Vertices: []vector.Vec4{
 			{1, twoThird, third, 0}, {1, twoThird, 0, third}, {1, twoThird, -third, 0}, {1, twoThird, 0, -third},
 			{1, 0, twoThird, third}, {1, third, twoThird, 0}, {1, 0, twoThird, -third}, {1, -third, twoThird, 0},

@@ -110,7 +110,8 @@ func TruncatedIcosahedronData(n float64) CellData {
 		C:               vector.Vec4{0, 0, 0, 0},
 		CellType:        "spherical",
 		VV:              vv,
-		MetricValues:    MetricValues{E: eVal, P: pVal},
+		EVal:            eVal,
+		PVal:            pVal,
 		Vertices: []vector.Vec4{
 			{1, F, D, A}, {1, B, E, C}, {1, B, E, -C}, {1, F, D, -A}, {1, C, P, 0},
 			{1, C, B, E}, {1, A, F, D}, {1, 0, C, P}, {1, -A, F, D}, {1, -C, B, E},
