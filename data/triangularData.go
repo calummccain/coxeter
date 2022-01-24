@@ -1,7 +1,6 @@
 package data
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/calummccain/coxeter/vector"
@@ -21,19 +20,21 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 
 	// Goursat tetrahedron side lengths
 	fe := 1.0 / (1.0 - cos)
-	var cv, fv, ev, vv, ce float64
+	var cf, cv, fv, ev, vv, ce float64
 	if metric == 'p' {
-		vv = 576.0
+		vv = 24.0
 		ev = 12.0
 		fv = 16.0
 		cv = 16.0
-		ce = 4.0
+		ce = 4.0 / 3.0
+		cf = 1.0
 	} else {
-		vv = 1.0 / (1.0 - 4.0*cos)
+		vv = (1.0 + 2.0*cos) / (1.0 - 4.0*cos)
 		ev = (1.0 - cos) / (1.0 - 4.0*cos)
 		fv = 1.0 / (1.0 - 4.0*cos)
-		cv = 1.0 / (1.0 - 4.0*cos)
-		ce = 1.0 / (1.0 - cos)
+		cv = cos * cos / ((1.0 - 4.0*cos) * math.Abs(1.0-4.0*cos))
+		cf = cos * cos / math.Abs(1.0-4.0*cos)
+		ce = cos * cos / (math.Abs(1.0-4.0*cos) * (1.0 - cos))
 	}
 
 	initialVerts := []vector.Vec4{
@@ -62,7 +63,7 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 
 	// reflections
 	Amat := func(v vector.Vec4) vector.Vec4 {
-		return vector.Vec4{W: v.W, X: v.X, Y: -v.Y + 3.0*v.Z, Z: v.Y + v.Z}
+		return vector.Vec4{W: v.W, X: v.X, Y: 0.5 * (-v.Y + 3.0*v.Z), Z: 0.5 * (v.Y + v.Z)}
 	}
 	Bmat := func(v vector.Vec4) vector.Vec4 { return vector.Vec4{W: v.W, X: v.X, Y: v.Y, Z: -v.Z} }
 	Cmat := func(v vector.Vec4) vector.Vec4 {
@@ -113,7 +114,7 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 		CFV:             CFV,
 		CEV:             CEV,
 		FEV:             FEV,
-		CF:              1.0,
+		CF:              cf,
 		CE:              ce,
 		CV:              cv,
 		FE:              fe,
@@ -133,13 +134,6 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 		InnerProduct:    innerProd,
 	}
 
-	fmt.Println(initialData.DistanceSquared(C, V))
-	fmt.Println(initialData.DistanceSquared(F, V))
-
-	fmt.Println(initialData.DistanceSquared(E, V))
-
-	fmt.Println(initialData.DistanceSquared(initialVerts[0], initialVerts[1]))
-
 	fPoints := initialData.MakeFaces(numberOfFaces)
 
 	initialData.Vertices = initialData.MakeRing(initialVerts)
@@ -147,8 +141,6 @@ func TriangularData(n float64, numberOfFaces int) CellData {
 	edges := initialData.MakeRing(initialEdges)
 
 	initialData.GenerateFaceData(fPoints)
-
-	fmt.Println(initialData.Faces)
 
 	initialData.GenerateEdgeData(edges)
 

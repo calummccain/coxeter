@@ -26,7 +26,7 @@ func TetrahedronData(n float64) CellData {
 	var cv, fv, ev, vv float64
 	if metric == 'p' {
 		cv = 3.0
-		fv = 8.0
+		fv = 8.0 / 3.0
 		ev = 2.0
 		vv = 4.0
 	} else {

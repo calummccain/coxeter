@@ -20,19 +20,21 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 
 	// Goursat tetrahedron side lengths
 	fe := 1.0 / (1.0 - cos)
-	var cv, fv, ev, vv, ce float64
+	var cv, fv, ev, vv, ce, cf float64
 	if metric == 'p' {
 		vv = 8
 		ev = 4.0
 		fv = 16.0
-		cv = 0.75
-		ce = 4.0
+		cv = 144
+		ce = 36.0
+		cf = 9.0
 	} else {
 		vv = (1.0 - 2.0*cos/3.0) / (1.0 - 4.0*cos/3.0)
 		ev = (1.0 - cos) / (1.0 - 4.0*cos/3.0)
 		fv = 1.0 / (1.0 - 4.0*cos/3.0)
-		cv = 1.0 / (1.0 - 4.0*cos/3.0)
-		ce = 1.0 / (1.0 - cos)
+		cv = cos * cos / ((1.0 - 4.0*cos/3.0) * math.Abs(1.0-4.0*cos/3.0))
+		ce = cos * cos / (math.Abs(1.0-4.0*cos/3.0) * (1.0 - cos))
+		cf = cos * cos / math.Abs(1.0-4.0*cos/3.0)
 	}
 
 	initialVerts := []vector.Vec4{
@@ -118,7 +120,7 @@ func HexagonalData(n float64, numberOfFaces int) CellData {
 		CFV:             CFV,
 		CEV:             CEV,
 		FEV:             FEV,
-		CF:              1.0,
+		CF:              cf,
 		CE:              ce,
 		CV:              cv,
 		FE:              fe,

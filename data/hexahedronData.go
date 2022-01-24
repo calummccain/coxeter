@@ -25,14 +25,15 @@ func HexahedronData(n float64) CellData {
 
 	var cv, fv, ev, vv float64
 	if metric == 'p' {
-		cv = 0.0
-		fv = 0.0
-		ev = 0.0
+		cv = 3.0
+		fv = 2.0
+		ev = 1.0
 		vv = 2.0
 	} else if metric == 'e' {
-		cv = 0.0
-		fv = 0.0
-		ev = 0.0
+		ce = 2.0
+		cv = 3.0
+		fv = 2.0
+		ev = 1.0
 		vv = 2.0
 	} else {
 		cv = 2.0 * cot / (3.0 - cot)

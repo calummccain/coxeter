@@ -20,19 +20,21 @@ func SquareData(n float64, numberOfFaces int) CellData {
 
 	// Goursat tetrahedron side lengths
 	fe := 1.0 / (1.0 - cos)
-	var cv, fv, ev, vv, ce float64
+	var cv, fv, ev, vv, ce, cf float64
 	if metric == 'p' {
-		vv = 8.0
+		vv = 4.0
 		ev = 2.0
 		fv = 4.0
-		cv = 0.75
-		ce = 4.0
+		cv = 4.0
+		ce = 2.0
+		cf = 1.0
 	} else {
 		vv = 1.0 / (1.0 - 2.0*cos)
 		ev = (1.0 - cos) / (1.0 - 2.0*cos)
 		fv = 1.0 / (1.0 - 2.0*cos)
-		cv = 1.0 / (1.0 - 2.0*cos)
-		ce = 1.0 / (1.0 - cos)
+		cv = cos * cos / ((1.0 - 2.0*cos) * math.Abs(1.0-2.0*cos))
+		ce = cos * cos / (math.Abs(1.0-2.0*cos) * (1.0 - cos))
+		cf = cos * cos / math.Abs(1.0-2.0*cos)
 	}
 
 	initialVerts := []vector.Vec4{
@@ -120,7 +122,7 @@ func SquareData(n float64, numberOfFaces int) CellData {
 		CFV:             CFV,
 		CEV:             CEV,
 		FEV:             FEV,
-		CF:              1.0,
+		CF:              cf,
 		CE:              ce,
 		CV:              cv,
 		FE:              fe,
