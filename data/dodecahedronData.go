@@ -25,9 +25,9 @@ func DodecahedronData(n float64) CellData {
 
 	var cv, fv, ev, vv float64
 	if metric == 'p' {
-		cv = 1.0
-		fv = 4.0 / (3.0 * P4 * (7.0 - 4.0*P))
-		ev = P_2 / 3.0
+		cv = 3.0
+		fv = 2.0 * (1.0 - Rt_5)
+		ev = P_2
 		vv = 2.0 * P_2
 	} else {
 		cv = P4 * cot / (3.0 - cot)
