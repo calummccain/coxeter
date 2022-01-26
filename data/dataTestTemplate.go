@@ -59,20 +59,22 @@ func DataTest(data CellData, t *testing.T) {
 	}
 
 	// Check that the pythagorean identities are satisfied
-	if math.Abs(data.CF*data.FE-data.CE) > TestEps {
-		t.Errorf("%f CF * FE != CE \n CF * FE = %f \n CE = %f", data.R, data.CF*data.FE, data.CE)
-	}
+	if data.Metric != 'e' {
+		if math.Abs(data.CF*data.FE-data.CE) > TestEps {
+			t.Errorf("%f CF * FE != CE \n CF * FE = %f \n CE = %f", data.R, data.CF*data.FE, data.CE)
+		}
 
-	if math.Abs(data.CF*data.FV-data.CV) > TestEps {
-		t.Errorf("%f CF * FV != CV \n CF * FV = %f \n CV = %f", data.R, data.CF*data.FV, data.CV)
-	}
+		if math.Abs(data.CF*data.FV-data.CV) > TestEps {
+			t.Errorf("%f CF * FV != CV \n CF * FV = %f \n CV = %f", data.R, data.CF*data.FV, data.CV)
+		}
 
-	if math.Abs(data.CE*data.EV-data.CV) > TestEps {
-		t.Errorf("%f CE * EV != CV \n CE * EV = %f \n CV = %f", data.R, data.CE*data.EV, data.CV)
-	}
+		if math.Abs(data.CE*data.EV-data.CV) > TestEps {
+			t.Errorf("%f CE * EV != CV \n CE * EV = %f \n CV = %f", data.R, data.CE*data.EV, data.CV)
+		}
 
-	if math.Abs(data.FE*data.EV-data.FV) > TestEps {
-		t.Errorf("%f FE * EV != FV \n FE * EV = %f \n FV = %f", data.R, data.FE*data.EV, data.FV)
+		if math.Abs(data.FE*data.EV-data.FV) > TestEps {
+			t.Errorf("%f FE * EV != FV \n FE * EV = %f \n FV = %f", data.R, data.FE*data.EV, data.FV)
+		}
 	}
 
 	// Check that the vertices have the correct norm
@@ -129,28 +131,30 @@ func DataTest(data CellData, t *testing.T) {
 	}
 
 	// Correct Goursat tetrahedron angles
-	if math.Abs(data.DistanceSquared(data.CFE, data.CFV)-math.Pow(math.Cos(math.Pi/data.P), 2.0)) > TestEps {
-		t.Errorf("%f Angle between CFE and CFV is not pi/%f", data.R, data.R)
-	}
+	if data.Metric != 'e' {
+		if math.Abs(data.DistanceSquared(data.CFE, data.CFV)-math.Pow(math.Cos(math.Pi/data.P), 2.0)) > TestEps {
+			t.Errorf("%f Angle between CFE and CFV is not pi/%f", data.R, data.R)
+		}
 
-	if math.Abs(data.DistanceSquared(data.CFE, data.FEV)) > TestEps {
-		t.Errorf("%f Angle between CFE and FEV is not pi/2", data.R)
-	}
+		if math.Abs(data.DistanceSquared(data.CFE, data.FEV)) > TestEps {
+			t.Errorf("%f Angle between CFE and FEV is not pi/2", data.R)
+		}
 
-	if math.Abs(data.DistanceSquared(data.CFE, data.CEV)) > TestEps {
-		t.Errorf("%f Angle between CFE and CEV is not pi/2", data.R)
-	}
+		if math.Abs(data.DistanceSquared(data.CFE, data.CEV)) > TestEps {
+			t.Errorf("%f Angle between CFE and CEV is not pi/2", data.R)
+		}
 
-	if math.Abs(data.DistanceSquared(data.CFV, data.CEV)-math.Pow(math.Cos(math.Pi/data.Q), 2.0)) > TestEps {
-		t.Errorf("%f Angle between CFV and CEV is not pi/%f", data.R, data.Q)
-	}
+		if math.Abs(data.DistanceSquared(data.CFV, data.CEV)-math.Pow(math.Cos(math.Pi/data.Q), 2.0)) > TestEps {
+			t.Errorf("%f Angle between CFV and CEV is not pi/%f", data.R, data.Q)
+		}
 
-	if math.Abs(data.DistanceSquared(data.CFV, data.FEV)) > TestEps {
-		t.Errorf("%f Angle between CFV and FEV is not pi/2", data.R)
-	}
+		if math.Abs(data.DistanceSquared(data.CFV, data.FEV)) > TestEps {
+			t.Errorf("%f Angle between CFV and FEV is not pi/2", data.R)
+		}
 
-	if math.Abs(data.DistanceSquared(data.CEV, data.FEV)-math.Pow(math.Cos(math.Pi/data.R), 2.0)) > TestEps {
-		t.Errorf("%f Angle between CEV and FEV is not pi/%f, n = %f", data.R, data.R, math.Pi/(math.Acos(math.Sqrt(data.DistanceSquared(data.CEV, data.FEV)))))
+		if math.Abs(data.DistanceSquared(data.CEV, data.FEV)-math.Pow(math.Cos(math.Pi/data.R), 2.0)) > TestEps {
+			t.Errorf("%f Angle between CEV and FEV is not pi/%f, n = %f", data.R, data.R, math.Pi/(math.Acos(math.Sqrt(data.DistanceSquared(data.CEV, data.FEV)))))
+		}
 	}
 
 }
