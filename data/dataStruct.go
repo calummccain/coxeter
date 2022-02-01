@@ -10,7 +10,7 @@ type CellData struct {
 	P               float64
 	Q               float64
 	R               float64
-	Metric          byte
+	Space           byte
 	Vertices        []vector.Vec4
 	Edges           [][2]int
 	Faces           [][]int
@@ -47,21 +47,17 @@ type CellData struct {
 
 func (cellData *CellData) DistanceSquared(a, b vector.Vec4) float64 {
 
-	if cellData.Metric == 'e' {
+	if cellData.Space == 'e' {
 		return cellData.InnerProduct(vector.Diff4(a, b), vector.Diff4(a, b))
 	}
 
 	den := 1.0
 
-	if math.Abs(cellData.InnerProduct(a, a)) < DistanceSquaredEps {
-		//den *= cellData.InnerProduct(vector.Vec4{W: a.W, X: 0, Y: 0, Z: 0}, vector.Vec4{W: a.W, X: 0, Y: 0, Z: 0})
-	} else {
+	if math.Abs(cellData.InnerProduct(a, a)) > DistanceSquaredEps {
 		den *= cellData.InnerProduct(a, a)
 	}
 
-	if math.Abs(cellData.InnerProduct(b, b)) < DistanceSquaredEps {
-		//den *= cellData.InnerProduct(vector.Vec4{W: b.W, X: 0, Y: 0, Z: 0}, vector.Vec4{W: b.W, X: 0, Y: 0, Z: 0})
-	} else {
+	if math.Abs(cellData.InnerProduct(b, b)) > DistanceSquaredEps {
 		den *= cellData.InnerProduct(b, b)
 	}
 

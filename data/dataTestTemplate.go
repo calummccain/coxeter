@@ -59,7 +59,7 @@ func DataTest(data CellData, t *testing.T) {
 	}
 
 	// Check that the pythagorean identities are satisfied
-	if data.Metric != 'e' {
+	if data.Space != 'e' {
 		if math.Abs(data.CF*data.FE-data.CE) > TestEps {
 			t.Errorf("%f CF * FE != CE \n CF * FE = %f \n CE = %f", data.R, data.CF*data.FE, data.CE)
 		}
@@ -79,19 +79,19 @@ func DataTest(data CellData, t *testing.T) {
 
 	// Check that the vertices have the correct norm
 	for _, vertex := range data.Vertices {
-		if data.Metric == 's' {
+		if data.Space == 's' {
 			if math.Abs(data.InnerProduct(vertex, vertex)-1.0) > TestEps {
 				t.Errorf("%f Magnitude of %v != 1 \n <v,v> = %f", data.R, vertex, data.InnerProduct(vertex, vertex))
 			}
-		} else if data.Metric == 'h' {
+		} else if data.Space == 'h' {
 			if math.Abs(data.InnerProduct(vertex, vertex)-1.0) > TestEps {
 				t.Errorf("%f Magnitude of %v != 1 \n <v,v> = %f", data.R, vertex, data.InnerProduct(vertex, vertex))
 			}
-		} else if data.Metric == 'p' {
+		} else if data.Space == 'p' {
 			if math.Abs(data.InnerProduct(vertex, vertex)) > TestEps {
 				t.Errorf("%f Magnitude of %v != 0 \n <v,v> = %f", data.R, vertex, data.InnerProduct(vertex, vertex))
 			}
-		} else if data.Metric == 'u' {
+		} else if data.Space == 'u' {
 			if math.Abs(data.InnerProduct(vertex, vertex)+1.0) > TestEps {
 				t.Errorf("%f Magnitude of %v != -1 \n <v,v> = %f", data.R, vertex, data.InnerProduct(vertex, vertex))
 			}
@@ -131,7 +131,7 @@ func DataTest(data CellData, t *testing.T) {
 	}
 
 	// Correct Goursat tetrahedron angles
-	if data.Metric != 'e' {
+	if data.Space != 'e' {
 		if math.Abs(data.DistanceSquared(data.CFE, data.CFV)-math.Pow(math.Cos(math.Pi/data.P), 2.0)) > TestEps {
 			t.Errorf("%f Angle between CFE and CFV is not pi/%f", data.R, data.R)
 		}
