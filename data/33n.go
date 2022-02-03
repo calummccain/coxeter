@@ -11,7 +11,7 @@ const (
 	pVal33n = 6.0
 
 	eVal33nTrunc = 5.1042993121 //math.Pi / math.Atan(Rt_2)
-	pVal33nTrunc = 10.727915990 //math.Pi / math.Atan(Rt_11)
+	pVal33nTrunc = 10.727915991 //math.Pi / math.Atan(Rt_11)
 
 	eVal33nRect = 5.1042993121 //math.Pi / math.Atan(Rt_2)
 	pVal33nRect = 1e100        //∞
