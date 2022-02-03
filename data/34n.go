@@ -159,7 +159,7 @@ func Honeycomb34nTrunc(n float64) Honeycomb {
 	var scale func(vector.Vec4) vector.Vec4
 	if space == 'p' {
 		scale = func(v vector.Vec4) vector.Vec4 {
-			return vector.Vec4{W: 3.0 * Rt_5 * v.W, X: 3.0 * Rt_5 * v.X, Y: 3.0 * Rt_5 * v.Y, Z: 3.0 * Rt_5 * v.Z}
+			return vector.Vec4{W: Rt5 * v.W, X: 3.0 * v.X, Y: 3.0 * v.Y, Z: 3.0 * v.Z}
 		}
 	} else if space == 'e' {
 		scale = func(v vector.Vec4) vector.Vec4 {
@@ -178,7 +178,7 @@ func Honeycomb34nTrunc(n float64) Honeycomb {
 
 	var innerProd func(vector.Vec4, vector.Vec4) float64
 	if space == 'p' {
-		innerProd = func(a, b vector.Vec4) float64 { return (a.W*b.W - (a.X*b.X + a.Y*b.Y + a.Z*b.Z)) * 9.0 / 5.0 }
+		innerProd = func(a, b vector.Vec4) float64 { return 5.0*a.W*b.W - 9.0*(a.X*b.X+a.Y*b.Y+a.Z*b.Z) }
 	} else {
 		innerProd = func(a, b vector.Vec4) float64 {
 			return (9.0*cot*a.W*b.W - 9.0*(2.0*cot-1.0)*(a.X*b.X+a.Y*b.Y+a.Z*b.Z)) / math.Abs(5.0-cot)
