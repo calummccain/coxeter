@@ -182,7 +182,7 @@ func Honeycomb33nTrunc(n float64) Honeycomb {
 		Coxeter:  Coxeter33n(n),
 		CellType: "spherical",
 		Vertices: []vector.Vec4{
-			{1, 1, third, third},
+			{W: 1, X: 1, Y: third, Z: third},
 			{W: 1, X: third, Y: 1, Z: third},
 			{W: 1, X: third, Y: third, Z: 1},
 			{W: 1, X: 1, Y: -third, Z: -third},
