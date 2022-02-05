@@ -6,7 +6,7 @@ import (
 	"github.com/calummccain/coxeter/vector"
 )
 
-func (cellData *CellData) GenerateFaceData(faces []vector.Vec4) {
+func (honeycomb *Honeycomb) GenerateFaceData(faces []vector.Vec4) {
 
 	faceData := [][]int{}
 	var nearestPoints []int
@@ -19,15 +19,15 @@ func (cellData *CellData) GenerateFaceData(faces []vector.Vec4) {
 		nearestPoints = []int{}
 		k = 0
 
-		for j := 0; j < len(cellData.Vertices); j++ {
+		for j := 0; j < len(honeycomb.Vertices); j++ {
 
-			if k == int(cellData.P) {
+			if k == int(honeycomb.Coxeter.P) {
 
 				break
 
 			}
 
-			if math.Abs(cellData.DistanceSquared(cellData.Vertices[j], faces[i])-cellData.FV) < eps {
+			if math.Abs(honeycomb.DistanceSquared(honeycomb.Vertices[j], faces[i])-honeycomb.Coxeter.GoursatTetrahedron.FV) < eps {
 
 				nearestPoints = append(nearestPoints, j)
 				k++
@@ -40,6 +40,6 @@ func (cellData *CellData) GenerateFaceData(faces []vector.Vec4) {
 
 	}
 
-	cellData.Faces = faceData
+	honeycomb.Faces = faceData
 
 }

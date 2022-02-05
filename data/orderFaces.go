@@ -18,25 +18,29 @@ func max(a, b int) int {
 	return a
 }
 
-func (cellData *CellData) OrderFaces() {
+func (honeycomb *Honeycomb) OrderFaces() {
 
 	newFaceData := [][]int{}
 
 	var newFace []int
 	var k int
 
-	for i := 0; i < len(cellData.Faces); i++ {
+	for i := 0; i < len(honeycomb.Faces); i++ {
 
-		newFace = []int{cellData.Faces[i][0]}
+		newFace = []int{honeycomb.Faces[i][0]}
 		k = 1
 
-		for k < int(cellData.P) {
+		for k < int(honeycomb.Coxeter.P) {
 
-			for j := 1; j < int(cellData.P); j++ {
+			for j := 1; j < int(honeycomb.Coxeter.P); j++ {
 
-				if vector.IsInArray2([2]int{min(newFace[len(newFace)-1], cellData.Faces[i][j]), max(newFace[len(newFace)-1], cellData.Faces[i][j])}, cellData.Edges) && !vector.IsInArray1(cellData.Faces[i][j], newFace) {
+				if vector.IsInArray2(
+					[2]int{
+						min(newFace[len(newFace)-1], honeycomb.Faces[i][j]),
+						max(newFace[len(newFace)-1], honeycomb.Faces[i][j])},
+					honeycomb.Edges) && !vector.IsInArray1(honeycomb.Faces[i][j], newFace) {
 
-					newFace = append(newFace, cellData.Faces[i][j])
+					newFace = append(newFace, honeycomb.Faces[i][j])
 					k++
 
 				}
@@ -49,6 +53,6 @@ func (cellData *CellData) OrderFaces() {
 
 	}
 
-	cellData.Faces = newFaceData
+	honeycomb.Faces = newFaceData
 
 }

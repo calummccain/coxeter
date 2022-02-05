@@ -4,9 +4,9 @@ import (
 	"github.com/calummccain/coxeter/vector"
 )
 
-func (cellData *CellData) MakeFaces(maxNumber int) []vector.Vec4 {
+func (coxeter *Coxeter) MakeFaces(maxNumber int) ([]string, []vector.Vec4) {
 
-	faces := []vector.Vec4{cellData.F}
+	faces := []vector.Vec4{coxeter.GoursatTetrahedron.F}
 	faceNames := []string{""}
 	i := 1
 
@@ -23,9 +23,9 @@ func (cellData *CellData) MakeFaces(maxNumber int) []vector.Vec4 {
 		newFaces = []vector.Vec4{}
 		newNames = []string{}
 
-		for j < int(cellData.P) {
+		for j < int(coxeter.P) {
 
-			testCenters = vector.TransformVertices(faces, spec, cellData.Amat, cellData.Bmat, cellData.Cmat, cellData.Dmat)
+			testCenters = vector.TransformVertices(faces, spec, coxeter.A, coxeter.B, coxeter.C, coxeter.D)
 
 			for k := 0; k < len(testCenters); k++ {
 
@@ -51,8 +51,6 @@ func (cellData *CellData) MakeFaces(maxNumber int) []vector.Vec4 {
 
 	}
 
-	cellData.FaceReflections = faceNames
-
-	return faces
+	return faceNames, faces
 
 }

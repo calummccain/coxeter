@@ -4,7 +4,7 @@ import (
 	"github.com/calummccain/coxeter/vector"
 )
 
-func (cellData *CellData) MakeRing(initialRings []vector.Vec4) []vector.Vec4 {
+func (coxeter *Coxeter) MakeRing(initialRings []vector.Vec4) []vector.Vec4 {
 
 	rings := initialRings
 
@@ -12,9 +12,9 @@ func (cellData *CellData) MakeRing(initialRings []vector.Vec4) []vector.Vec4 {
 
 	var testRing []vector.Vec4
 
-	for i := 0; i < len(cellData.FaceReflections); i++ {
+	for i := 0; i < len(coxeter.FaceReflections); i++ {
 
-		testRing = vector.TransformVertices(rings, cellData.FaceReflections[i], cellData.Amat, cellData.Bmat, cellData.Cmat, cellData.Dmat)
+		testRing = vector.TransformVertices(rings, coxeter.FaceReflections[i], coxeter.A, coxeter.B, coxeter.C, coxeter.D)
 
 		for j := 0; j < len(testRing); j++ {
 

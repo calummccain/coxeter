@@ -7,7 +7,7 @@ import (
 )
 
 // Only works for hyperbolic cells (no need to do for spherical or euclidean)
-func (cellData *CellData) GenerateEdgeData(edges []vector.Vec4) {
+func (honeycomb *Honeycomb) GenerateEdgeData(edges []vector.Vec4) {
 
 	edgeData := [][2]int{}
 	var nearestPoints [2]int
@@ -20,7 +20,7 @@ func (cellData *CellData) GenerateEdgeData(edges []vector.Vec4) {
 		nearestPoints = [2]int{}
 		k = 0
 
-		for j := 0; j < len(cellData.Vertices); j++ {
+		for j := 0; j < len(honeycomb.Vertices); j++ {
 
 			if k == 2 {
 
@@ -28,7 +28,7 @@ func (cellData *CellData) GenerateEdgeData(edges []vector.Vec4) {
 
 			}
 
-			if math.Abs(cellData.DistanceSquared(cellData.Vertices[j], edges[i])-cellData.EV) < eps {
+			if math.Abs(honeycomb.DistanceSquared(honeycomb.Vertices[j], edges[i])-honeycomb.Coxeter.GoursatTetrahedron.EV) < eps {
 
 				nearestPoints[k] = j
 				k++
@@ -41,6 +41,6 @@ func (cellData *CellData) GenerateEdgeData(edges []vector.Vec4) {
 
 	}
 
-	cellData.Edges = edgeData
+	honeycomb.Edges = edgeData
 
 }
