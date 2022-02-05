@@ -76,3 +76,29 @@ func (honeycomb *Honeycomb) DistanceSquared(a, b vector.Vec4) float64 {
 	return honeycomb.InnerProduct(a, b) * honeycomb.InnerProduct(a, b) / den
 
 }
+
+func (honeycomb *Honeycomb) GenerateCell(word string) Cell {
+
+	vertices := vector.TransformVertices(
+		honeycomb.Vertices,
+		word,
+		honeycomb.Coxeter.A,
+		honeycomb.Coxeter.B,
+		honeycomb.Coxeter.C,
+		honeycomb.Coxeter.D,
+	)
+
+	for i := 0; i < len(vertices); i++ {
+		vertices[i] = honeycomb.Scale(vertices[i])
+	}
+
+	return Cell{
+		Vertices:    vertices,
+		Edges:       honeycomb.Edges,
+		Faces:       honeycomb.Faces,
+		NumVertices: len(vertices),
+		NumEdges:    len(honeycomb.Edges),
+		NumFaces:    len(honeycomb.Faces),
+	}
+
+}
