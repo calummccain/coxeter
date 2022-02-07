@@ -1,22 +1,18 @@
 package vector
 
-import "github.com/calummccain/coxeter/shared"
+func TransformVertices(baseVertices []Vec4, transformation string, A, B, C, D func(Vec4) Vec4) []Vec4 {
 
-func TransformVertices(baseVertices [][4]float64, transformation string, matrices shared.Matrices) [][4]float64 {
+	newVertices := []Vec4{}
+	e1 := Vec4{1, 0, 0, 0}
+	e2 := Vec4{0, 1, 0, 0}
+	e3 := Vec4{0, 0, 1, 0}
+	e4 := Vec4{0, 0, 0, 1}
 
-	newVertices := [][4]float64{}
-	e1 := [4]float64{1, 0, 0, 0}
-	e2 := [4]float64{0, 1, 0, 0}
-	e3 := [4]float64{0, 0, 1, 0}
-	e4 := [4]float64{0, 0, 0, 1}
-
-	m := map[byte]func([4]float64) [4]float64{
-		'a': matrices.A,
-		'b': matrices.B,
-		'c': matrices.C,
-		'd': matrices.D,
-		'e': matrices.E,
-		'f': matrices.F,
+	m := map[byte]func(Vec4) Vec4{
+		'a': A,
+		'b': B,
+		'c': C,
+		'd': D,
 	}
 
 	if transformation != "" {
@@ -34,13 +30,13 @@ func TransformVertices(baseVertices [][4]float64, transformation string, matrice
 
 	}
 
-	newVertex := [4]float64{0, 0, 0, 0}
+	newVertex := Vec4{0, 0, 0, 0}
 
 	for j := 0; j < len(baseVertices); j++ {
 
-		newVertex = Sum4(Scale4(e1, baseVertices[j][0]), Scale4(e2, baseVertices[j][1]))
-		newVertex = Sum4(newVertex, Scale4(e3, baseVertices[j][2]))
-		newVertex = Sum4(newVertex, Scale4(e4, baseVertices[j][3]))
+		newVertex = Sum4(Scale4(e1, baseVertices[j].W), Scale4(e2, baseVertices[j].X))
+		newVertex = Sum4(newVertex, Scale4(e3, baseVertices[j].Y))
+		newVertex = Sum4(newVertex, Scale4(e4, baseVertices[j].Z))
 
 		newVertices = append(newVertices, newVertex)
 
