@@ -25,19 +25,28 @@ func (honeycomb *Honeycomb) OrderFaces() {
 	var newFace []int
 	var k int
 
+	var l1 int
+
 	for i := 0; i < len(honeycomb.Faces); i++ {
+
+		if len(honeycomb.Faces[i]) < 3 {
+			continue
+		}
 
 		newFace = []int{honeycomb.Faces[i][0]}
 		k = 1
 
-		for k < int(honeycomb.Coxeter.P) {
+		for k < len(honeycomb.Faces[i]) {
 
-			for j := 1; j < int(honeycomb.Coxeter.P); j++ {
+			l1 = len(newFace)
+
+			for j := 1; j < len(honeycomb.Faces[i]); j++ {
 
 				if vector.IsInArray2(
 					[2]int{
 						min(newFace[len(newFace)-1], honeycomb.Faces[i][j]),
-						max(newFace[len(newFace)-1], honeycomb.Faces[i][j])},
+						max(newFace[len(newFace)-1], honeycomb.Faces[i][j]),
+					},
 					honeycomb.Edges) && !vector.IsInArray1(honeycomb.Faces[i][j], newFace) {
 
 					newFace = append(newFace, honeycomb.Faces[i][j])
@@ -45,6 +54,10 @@ func (honeycomb *Honeycomb) OrderFaces() {
 
 				}
 
+			}
+
+			if l1 == len(newFace) {
+				break
 			}
 
 		}

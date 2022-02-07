@@ -10,8 +10,8 @@ const (
 	eVal36n = 2.0 // Really?
 	pVal36n = 3.0
 
-	eVal36nTrunc = 2.0          // Really?
-	pVal36nTrunc = 10.727915991 //math.Pi / math.Atan(Rt_11)
+	eVal36nTrunc = 2.0 // Really?
+	pVal36nTrunc = 6.0
 
 	eVal36nRect = 2.0   // Really?
 	pVal36nRect = 1e100 //∞
@@ -160,16 +160,15 @@ func Honeycomb36n(n float64, numberOfFaces int) Honeycomb {
 
 }
 
-// TODO
 func Honeycomb36nTrunc(n float64, numberOfFaces int) Honeycomb {
 
 	coxeter, facePoints := Coxeter36n(n, numberOfFaces)
 
 	cos := math.Pow(math.Cos(math.Pi/n), 2.0)
 
-	den := math.Sqrt(math.Abs(1.0 - 4.0*cos))
+	den := math.Sqrt(math.Abs(1.0 - 4.0*cos/3.0))
 
-	space := Boundaries(n, eVal36n, pVal36n)
+	space := Boundaries(n, eVal36nTrunc, pVal36nTrunc)
 
 	var scale func(vector.Vec4) vector.Vec4
 	if space == 'p' {
@@ -187,20 +186,32 @@ func Honeycomb36nTrunc(n float64, numberOfFaces int) Honeycomb {
 		innerProd = func(a, b vector.Vec4) float64 { return 16.0*a.W*b.W - a.X*b.X - 4.0*a.Y*b.Y - 12.0*a.Z*b.Z }
 	} else {
 		innerProd = func(a, b vector.Vec4) float64 {
-			return (a.W*b.W - cos*cos*a.X*b.X - cos*a.Y*b.Y - 3.0*cos*a.Z*b.Z) / math.Abs(1.0-4.0*cos)
+			return (a.W*b.W - cos*cos*a.X*b.X - cos*a.Y*b.Y - 3.0*cos*a.Z*b.Z) / math.Abs(1.0-4.0*cos/3.0)
 		}
 	}
 
 	initialVerts := []vector.Vec4{
-		{W: 1, X: 0, Y: 2, Z: 0},
-		{W: 1, X: 0, Y: -1, Z: 1},
-		{W: 1, X: 0, Y: -1, Z: -1},
+		{W: 1, X: 0, Y: 1, Z: -1.0 / 3.0},
+		{W: 1, X: 0, Y: 0, Z: -2.0 / 3.0},
+		{W: 1, X: 0, Y: -1, Z: -1.0 / 3.0},
+		{W: 1, X: 0, Y: -1, Z: 1.0 / 3.0},
+		{W: 1, X: 0, Y: 0, Z: 2.0 / 3.0},
+		{W: 1, X: 0, Y: 1, Z: 1.0 / 3.0},
 	}
 
 	initialEdges := []vector.Vec4{
 		{W: 2, X: 0, Y: 1, Z: 1},
 		{W: 2, X: 0, Y: -2, Z: 0},
 		{W: 2, X: 0, Y: 1, Z: -1},
+		{W: 2, X: 0, Y: 2, Z: 0},
+		{W: 2, X: 0, Y: -1, Z: 1},
+		{W: 2, X: 0, Y: -1, Z: -1},
+	}
+
+	extraFaces := []vector.Vec4{
+		{W: 1, X: 0, Y: 2, Z: 0},
+		{W: 1, X: 0, Y: -1, Z: 1},
+		{W: 1, X: 0, Y: -1, Z: -1},
 	}
 
 	honeycomb := Honeycomb{
@@ -209,8 +220,8 @@ func Honeycomb36nTrunc(n float64, numberOfFaces int) Honeycomb {
 		Vertices:     []vector.Vec4{},
 		Edges:        [][2]int{},
 		Faces:        [][]int{},
-		EVal:         eVal36n,
-		PVal:         pVal36n,
+		EVal:         eVal36nTrunc,
+		PVal:         pVal36nTrunc,
 		Space:        space,
 		Scale:        scale,
 		InnerProduct: innerProd,
@@ -220,9 +231,34 @@ func Honeycomb36nTrunc(n float64, numberOfFaces int) Honeycomb {
 
 	edgePoints := honeycomb.Coxeter.MakeRing(initialEdges)
 
-	honeycomb.GenerateFaceData(facePoints)
+	var newVertices []vector.Vec4
 
-	honeycomb.GenerateEdgeData(edgePoints)
+	facePoints2 := []vector.Vec4{}
+	for _, transform := range honeycomb.Coxeter.FaceReflections {
+		newVertices = vector.TransformVertices(
+			extraFaces,
+			transform,
+			honeycomb.Coxeter.A,
+			honeycomb.Coxeter.B,
+			honeycomb.Coxeter.C,
+			honeycomb.Coxeter.D,
+		)
+		for _, vert := range newVertices {
+			if !vector.IsInArray4(vert, facePoints2) {
+				facePoints2 = append(facePoints2, vert)
+			}
+		}
+	}
+
+	d1 := 1.0 / (1.0 - 4.0*cos/3.0)
+	d2 := (1.0 - 2.0*cos) * (1.0 - 2.0*cos) / ((1.0 - 4.0*cos/3.0) * (1.0 - 4.0*cos))
+
+	honeycomb.GenerateFaceData2(facePoints, d1)
+	honeycomb.GenerateFaceData2(facePoints2, d2)
+
+	d3 := (1 - cos) / (1 - 4.0*cos/3.0)
+
+	honeycomb.GenerateEdgeData2(edgePoints, d3)
 
 	honeycomb.OrderFaces()
 
@@ -239,7 +275,7 @@ func Honeycomb36nRect(n float64, numberOfFaces int) Honeycomb {
 
 	den := math.Sqrt(math.Abs(1.0 - 4.0*cos))
 
-	space := Boundaries(n, eVal36n, pVal36n)
+	space := Boundaries(n, eVal36nRect, pVal36nRect)
 
 	var scale func(vector.Vec4) vector.Vec4
 	if space == 'p' {
