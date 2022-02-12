@@ -15,4 +15,5 @@
 # vendor/
 _bin/
 
-main*
+main
+main.go
