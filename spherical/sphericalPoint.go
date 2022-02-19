@@ -13,6 +13,10 @@ func InitSPoint(w, x, y, z float64) SPoint {
 	return SPoint{H: vector.Vec4{W: w, X: x, Y: y, Z: z}}
 }
 
+func InitSPointVec4(v vector.Vec4) SPoint {
+	return SPoint{H: v}
+}
+
 func (p *SPoint) HyperToStereo() {
 
 	p.S = vector.Vec3{X: p.H.X, Y: p.H.Y, Z: p.H.Z}

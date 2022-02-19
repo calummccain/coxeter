@@ -18,6 +18,10 @@ func InitHPoint(w, x, y, z float64) HPoint {
 	return HPoint{H: vector.Vec4{W: w, X: x, Y: y, Z: z}}
 }
 
+func InitHPointVec4(v vector.Vec4) HPoint {
+	return HPoint{H: v}
+}
+
 func Scale3(p vector.Vec3, a float64) vector.Vec3 {
 	return vector.Vec3{X: p.X * a, Y: p.Y * a, Z: p.Z * a}
 }
