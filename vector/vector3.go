@@ -8,6 +8,10 @@ type Vec3 struct {
 	Z float64
 }
 
+func (v Vec3) Norm() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y + v.Z*v.Z)
+}
+
 func (v Vec3) NormSquared() float64 {
 	return v.X*v.X + v.Y*v.Y + v.Z*v.Z
 }
@@ -66,8 +70,16 @@ func Cross3(v, w Vec3) Vec3 {
 	return Vec3{v.Y*w.Z - v.Z*w.Y, v.Z*w.X - v.X*w.Z, v.X*w.Y - v.Y*w.X}
 }
 
+func Norm3(v Vec3) float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y + v.Z*v.Z)
+}
+
 func NormSquared3(v Vec3) float64 {
 	return v.X*v.X + v.Y*v.Y + v.Z*v.Z
+}
+
+func Distance3(v, w Vec3) float64 {
+	return math.Sqrt(NormSquared3(Diff3(v, w)))
 }
 
 func DistanceSquared3(v, w Vec3) float64 {
