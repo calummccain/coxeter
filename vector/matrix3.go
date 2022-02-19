@@ -15,7 +15,7 @@ type Mat3 struct {
 	ZZ float64
 }
 
-func IniitialiseMat3(u, v, w Vec3) Mat3 {
+func InitialiseMat3(u, v, w Vec3) Mat3 {
 	return Mat3{
 		XX: u.X,
 		XY: u.Y,
