@@ -19,8 +19,8 @@ func InitSPointVec4(v vector.Vec4) SPoint {
 
 func (p *SPoint) HyperToStereo() {
 
-	p.S = vector.Vec3{X: p.H.X, Y: p.H.Y, Z: p.H.Z}
-	p.S.Scale(1.0 / (1.0 - p.H.W))
+	p.S = vector.Vec3{X: p.H.W, Y: p.H.X, Z: p.H.Y}
+	p.S.Scale(1.0 / (1.0 - p.H.Z))
 
 }
 
