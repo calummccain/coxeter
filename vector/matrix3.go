@@ -30,9 +30,9 @@ func InitialiseMat3(u, v, w Vec3) Mat3 {
 }
 
 func (m *Mat3) Determinant() float64 {
-	return m.XX*Determinant2(Mat2{m.YY, m.YZ, m.ZY, m.ZZ}) - m.XY*Determinant2(Mat2{m.XY, m.XZ, m.ZY, m.ZZ}) + m.XZ*Determinant2(Mat2{m.XY, m.XZ, m.YY, m.YZ})
+	return m.XX*Determinant2(Mat2{m.YY, m.YZ, m.ZY, m.ZZ}) - m.XY*Determinant2(Mat2{m.YX, m.YZ, m.ZX, m.ZZ}) + m.XZ*Determinant2(Mat2{m.YX, m.YY, m.ZX, m.ZY})
 }
 
 func Determinant3(m Mat3) float64 {
-	return m.XX*Determinant2(Mat2{m.YY, m.YZ, m.ZY, m.ZZ}) - m.XY*Determinant2(Mat2{m.XY, m.XZ, m.ZY, m.ZZ}) + m.XZ*Determinant2(Mat2{m.XY, m.XZ, m.YY, m.YZ})
+	return m.XX*Determinant2(Mat2{m.YY, m.YZ, m.ZY, m.ZZ}) - m.XY*Determinant2(Mat2{m.YX, m.YZ, m.ZX, m.ZZ}) + m.XZ*Determinant2(Mat2{m.YX, m.YY, m.ZX, m.ZY})
 }
