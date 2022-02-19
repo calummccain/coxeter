@@ -6,7 +6,7 @@ import (
 	"github.com/calummccain/coxeter/vector"
 )
 
-type hPoint struct {
+type HPoint struct {
 	H    vector.Vec4
 	K    vector.Vec3
 	P    vector.Vec3
@@ -14,8 +14,8 @@ type hPoint struct {
 	Norm float64
 }
 
-func InitHPoint(w, x, y, z float64) hPoint {
-	return hPoint{H: vector.Vec4{W: w, X: x, Y: y, Z: z}}
+func InitHPoint(w, x, y, z float64) HPoint {
+	return HPoint{H: vector.Vec4{W: w, X: x, Y: y, Z: z}}
 }
 
 func Scale3(p vector.Vec3, a float64) vector.Vec3 {
@@ -34,22 +34,22 @@ func Diff4(p, q vector.Vec4) vector.Vec4 {
 	return vector.Vec4{W: p.W - q.W, X: p.X - q.X, Y: p.Y - q.Y, Z: p.Z - q.Z}
 }
 
-func (p *hPoint) HyperboloidInnerProduct(q hPoint) float64 {
+func (p *HPoint) HyperboloidInnerProduct(q HPoint) float64 {
 	return p.H.W*q.H.W - p.H.X*q.H.X - p.H.Y*q.H.Y - p.H.Z*q.H.Z
 }
 
-func (p *hPoint) HyperbolicNorm() {
+func (p *HPoint) HyperbolicNorm() {
 	p.Norm = p.H.W*p.H.W - p.H.X*p.H.X - p.H.Y*p.H.Y - p.H.Z*p.H.Z
 }
 
-func (p *hPoint) HyperboloidToKlein() {
+func (p *HPoint) HyperboloidToKlein() {
 	inv := 1.0 / p.H.W
 	p.K.X = p.H.X * inv
 	p.K.Y = p.H.Y * inv
 	p.K.Z = p.H.Z * inv
 }
 
-func (p *hPoint) HyperboloidToPoincare() {
+func (p *HPoint) HyperboloidToPoincare() {
 	eps := HyperboloidToPoincareEps
 	var inv float64
 	if math.Abs(p.Norm) < eps {
@@ -64,7 +64,7 @@ func (p *hPoint) HyperboloidToPoincare() {
 	p.P.Z = p.H.Z * inv
 }
 
-func (p *hPoint) HyperboloidToUHP() {
+func (p *HPoint) HyperboloidToUHP() {
 	eps := HyperboloidToUHPEps
 	if math.Abs(p.H.W-p.H.Z) < eps {
 		p.U.X = p.H.X / p.H.W
@@ -81,7 +81,7 @@ func (p *hPoint) HyperboloidToUHP() {
 	}
 }
 
-func (p *hPoint) KleinToHyperboloid() {
+func (p *HPoint) KleinToHyperboloid() {
 	inv := 1.0 / (1.0 - p.K.NormSquared())
 	p.H.W = inv
 	p.H.X = p.K.X * inv
@@ -89,7 +89,7 @@ func (p *hPoint) KleinToHyperboloid() {
 	p.H.Z = p.K.Z * inv
 }
 
-func (p *hPoint) KleinToPoincare() {
+func (p *HPoint) KleinToPoincare() {
 	eps := KleinToPoincareEps
 	if p.K.NormSquared() < 1-eps {
 		p.P = p.K
@@ -98,11 +98,11 @@ func (p *hPoint) KleinToPoincare() {
 	}
 }
 
-func (p *hPoint) KleinToUHP() {
+func (p *HPoint) KleinToUHP() {
 	p.U = Scale3(vector.Vec3{X: p.K.X, Y: p.K.Y, Z: math.Sqrt(1.0 - p.K.NormSquared())}, 1.0/(1.0-p.K.Z))
 }
 
-func (p *hPoint) PoincareToHyperboloid() {
+func (p *HPoint) PoincareToHyperboloid() {
 	eps := PoincareToHyperboloidEps
 	r := p.P.NormSquared()
 	if math.Abs(r-1) < eps {
@@ -112,11 +112,11 @@ func (p *hPoint) PoincareToHyperboloid() {
 	}
 }
 
-func (p *hPoint) PoincareToKlein() {
+func (p *HPoint) PoincareToKlein() {
 	p.K = Scale3(p.P, 2.0/(1.0+p.P.NormSquared()))
 }
 
-func (p *hPoint) PoincareToUHP() {
+func (p *HPoint) PoincareToUHP() {
 	eps := PoincareToUHPEps
 	r := p.P.NormSquared()
 	s := 1 / (r + 1.0 - 2.0*p.P.Z)
@@ -130,7 +130,7 @@ func (p *hPoint) PoincareToUHP() {
 	}
 }
 
-func (p *hPoint) UHPToHyperboloid() {
+func (p *HPoint) UHPToHyperboloid() {
 	eps := UHPToHyperboloidEps
 	r := p.U.NormSquared()
 	if p.U.Z < eps {
@@ -140,12 +140,12 @@ func (p *hPoint) UHPToHyperboloid() {
 	}
 }
 
-func (p *hPoint) UHPToKlein() {
+func (p *HPoint) UHPToKlein() {
 	r := p.U.NormSquared()
 	p.K = Scale3(vector.Vec3{X: p.U.X, Y: p.U.Y, Z: (r - 1.0) * 0.5}, 2.0/(r+1.0))
 }
 
-func (p *hPoint) UHPToPoincare() {
+func (p *HPoint) UHPToPoincare() {
 	r := p.U.NormSquared()
 	p.P = Scale3(vector.Vec3{X: p.U.X, Y: p.U.Y, Z: (r - 1.0) * 0.5}, 2.0/(r+1.0+2.0*p.U.Z))
 }
