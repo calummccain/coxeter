@@ -161,10 +161,10 @@ func Honeycomb33nTrunc(n float64) Honeycomb {
 	} else {
 		scale = func(v vector.Vec4) vector.Vec4 {
 			return vector.Vec4{
-				W: math.Sqrt(math.Abs(cot/(22.0-2.0*cot))) * Rt3 * v.W,
-				X: math.Sqrt(math.Abs((cot-2.0)/(22.0-2.0*cot))) * v.X,
-				Y: math.Sqrt(math.Abs((cot-2.0)/(22.0-2.0*cot))) * v.Y,
-				Z: math.Sqrt(math.Abs((cot-2.0)/(22.0-2.0*cot))) * v.Z,
+				W: 3.0 * math.Sqrt(math.Abs(cot/(22.0-2.0*cot))) * v.W,
+				X: 3.0 * math.Sqrt(math.Abs((cot-2.0)/(22.0-2.0*cot))) * v.X,
+				Y: 3.0 * math.Sqrt(math.Abs((cot-2.0)/(22.0-2.0*cot))) * v.Y,
+				Z: 3.0 * math.Sqrt(math.Abs((cot-2.0)/(22.0-2.0*cot))) * v.Z,
 			}
 		}
 	}
@@ -174,7 +174,7 @@ func Honeycomb33nTrunc(n float64) Honeycomb {
 		innerProd = func(a, b vector.Vec4) float64 { return 11.0*a.W*b.W - 9.0*(a.X*b.X+a.Y*b.Y+a.Z*b.Z) }
 	} else {
 		innerProd = func(a, b vector.Vec4) float64 {
-			return (cot*a.W*b.W - (cot-2.0)*(a.X*b.X+a.Y*b.Y+a.Z*b.Z)) / math.Abs(22.0-2.0*cot)
+			return 9.0 * (cot*a.W*b.W - (cot-2.0)*(a.X*b.X+a.Y*b.Y+a.Z*b.Z)) / math.Abs(22.0-2.0*cot)
 		}
 	}
 
