@@ -190,7 +190,7 @@ func Honeycomb53nTrunc(n float64) Honeycomb {
 	var scale func(vector.Vec4) vector.Vec4
 	if space == 'p' {
 		scale = func(v vector.Vec4) vector.Vec4 {
-			return vector.Vec4{W: math.Sqrt(5.0-2.0*Rt2) * v.W, X: v.X, Y: v.Y, Z: v.Z}
+			return vector.Vec4{W: math.Sqrt(P2+0.2*P_2) * v.W, X: v.X, Y: v.Y, Z: v.Z}
 		}
 	} else if space == 'e' {
 		scale = func(v vector.Vec4) vector.Vec4 {
@@ -199,20 +199,20 @@ func Honeycomb53nTrunc(n float64) Honeycomb {
 	} else {
 		scale = func(v vector.Vec4) vector.Vec4 {
 			return vector.Vec4{
-				W: math.Sqrt(math.Abs(2.0*cot/(5.0-2.0*Rt2-(3.0-2.0*Rt2)*cot))) * v.W,
-				X: math.Sqrt(math.Abs((cot-1.0)/(5.0-2.0*Rt2-(3.0-2.0*Rt2)*cot))) * v.X,
-				Y: math.Sqrt(math.Abs((cot-1.0)/(5.0-2.0*Rt2-(3.0-2.0*Rt2)*cot))) * v.Y,
-				Z: math.Sqrt(math.Abs((cot-1.0)/(5.0-2.0*Rt2-(3.0-2.0*Rt2)*cot))) * v.Z,
+				W: P * math.Sqrt(math.Abs(cot/(1.0+P_4*0.2-P_2*cot*0.2))) * v.W,
+				X: math.Sqrt(math.Abs((cot-P_2)/(1.0+P_4*0.2-P_2*cot*0.2))) * v.X,
+				Y: math.Sqrt(math.Abs((cot-P_2)/(1.0+P_4*0.2-P_2*cot*0.2))) * v.Y,
+				Z: math.Sqrt(math.Abs((cot-P_2)/(1.0+P_4*0.2-P_2*cot*0.2))) * v.Z,
 			}
 		}
 	}
 
 	var innerProd func(vector.Vec4, vector.Vec4) float64
 	if space == 'p' {
-		innerProd = func(a, b vector.Vec4) float64 { return (5.0-2.0*Rt2)*a.W*b.W - (a.X*b.X + a.Y*b.Y + a.Z*b.Z) }
+		innerProd = func(a, b vector.Vec4) float64 { return (P2+0.2*P_2)*a.W*b.W - (a.X*b.X + a.Y*b.Y + a.Z*b.Z) }
 	} else {
 		innerProd = func(a, b vector.Vec4) float64 {
-			return (2.0*cot*a.W*b.W - (cot-1.0)*(a.X*b.X+a.Y*b.Y+a.Z*b.Z)) / math.Abs(5.0-2.0*Rt2-(3.0-2.0*Rt2)*cot)
+			return (P2*cot*a.W*b.W - (cot-P_2)*(a.X*b.X+a.Y*b.Y+a.Z*b.Z)) / math.Abs(1.0+P_4*0.2-P_2*cot*0.2)
 		}
 	}
 
@@ -335,16 +335,16 @@ func Honeycomb53nRect(n float64) Honeycomb {
 	} else {
 		scale = func(v vector.Vec4) vector.Vec4 {
 			return vector.Vec4{
-				W: P2 * math.Sqrt(cot) * v.W,
-				X: math.Sqrt(math.Abs(P2*cot-P_2)) * v.X,
-				Y: math.Sqrt(math.Abs(P2*cot-P_2)) * v.Y,
-				Z: math.Sqrt(math.Abs(P2*cot-P_2)) * v.Z,
+				W: P * math.Sqrt(cot) * v.W,
+				X: math.Sqrt(math.Abs(cot-P_2)) * v.X,
+				Y: math.Sqrt(math.Abs(cot-P_2)) * v.Y,
+				Z: math.Sqrt(math.Abs(cot-P_2)) * v.Z,
 			}
 		}
 	}
 
 	innerProd := func(a, b vector.Vec4) float64 {
-		return P4*cot*a.W*b.W - (P2*cot-P_2)*(a.X*b.X+a.Y*b.Y+a.Z*b.Z)
+		return P2*cot*a.W*b.W - (cot-P_2)*(a.X*b.X+a.Y*b.Y+a.Z*b.Z)
 	}
 
 	return Honeycomb{
