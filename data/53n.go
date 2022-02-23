@@ -177,9 +177,15 @@ func Honeycomb53nTrunc(n float64) Honeycomb {
 
 	cot := 1.0 / math.Pow(math.Tan(math.Pi/n), 2.0)
 
-	factor := Rt2 - 1.0
-
 	space := Boundaries(n, eVal53nTrunc, pVal53nTrunc)
+
+	A := (P4 - 1.0) * 0.2
+	B := 1.0 + Rt_5
+	C := A * P_1
+	D := B * P_1
+	E := (1 - Rt_5) * 0.5
+	F := (1 + Rt_5) * 0.5
+	G := P_1 * Rt_5
 
 	var scale func(vector.Vec4) vector.Vec4
 	if space == 'p' {
@@ -214,30 +220,66 @@ func Honeycomb53nTrunc(n float64) Honeycomb {
 		Coxeter:  Coxeter53n(n),
 		CellType: "spherical",
 		Vertices: []vector.Vec4{
-			{W: 1, X: 1, Y: 1, Z: factor},
-			{W: 1, X: 1, Y: factor, Z: 1},
-			{W: 1, X: factor, Y: 1, Z: 1},
-			{W: 1, X: 1, Y: 1, Z: -factor},
-			{W: 1, X: 1, Y: factor, Z: -1},
-			{W: 1, X: factor, Y: 1, Z: -1},
-			{W: 1, X: 1, Y: -1, Z: factor},
-			{W: 1, X: 1, Y: -factor, Z: 1},
-			{W: 1, X: factor, Y: -1, Z: 1},
-			{W: 1, X: 1, Y: -1, Z: -factor},
-			{W: 1, X: 1, Y: -factor, Z: -1},
-			{W: 1, X: factor, Y: -1, Z: -1},
-			{W: 1, X: -1, Y: 1, Z: factor},
-			{W: 1, X: -1, Y: factor, Z: 1},
-			{W: 1, X: -factor, Y: 1, Z: 1},
-			{W: 1, X: -1, Y: 1, Z: -factor},
-			{W: 1, X: -1, Y: factor, Z: -1},
-			{W: 1, X: -factor, Y: 1, Z: -1},
-			{W: 1, X: -1, Y: -1, Z: factor},
-			{W: 1, X: -1, Y: -factor, Z: 1},
-			{W: 1, X: -factor, Y: -1, Z: 1},
-			{W: 1, X: -1, Y: -1, Z: -factor},
-			{W: 1, X: -1, Y: -factor, Z: -1},
-			{W: 1, X: -factor, Y: -1, Z: -1},
+			{W: 1, X: B, Y: C, Z: -E},
+			{W: 1, X: B, Y: C, Z: E},
+			{W: 1, X: P, Y: G, Z: 0},
+			{W: 1, X: P, Y: -G, Z: 0},
+			{W: 1, X: B, Y: -C, Z: -E},
+			{W: 1, X: B, Y: -C, Z: E},
+			{W: 1, X: F, Y: -A, Z: D},
+			{W: 1, X: A, Y: -D, Z: F},
+			{W: 1, X: D, Y: -F, Z: A},
+			{W: 1, X: C, Y: -E, Z: B},
+			{W: 1, X: C, Y: E, Z: B},
+			{W: 1, X: G, Y: 0, Z: P},
+			{W: 1, X: D, Y: F, Z: A},
+			{W: 1, X: A, Y: D, Z: F},
+			{W: 1, X: F, Y: A, Z: D},
+			{W: 1, X: E, Y: B, Z: C},
+			{W: 1, X: 0, Y: P, Z: G},
+			{W: 1, X: -E, Y: B, Z: C},
+			{W: 1, X: -F, Y: A, Z: D},
+			{W: 1, X: -A, Y: D, Z: F},
+			{W: 1, X: -D, Y: F, Z: A},
+			{W: 1, X: -C, Y: E, Z: B},
+			{W: 1, X: -G, Y: 0, Z: P},
+			{W: 1, X: -C, Y: -E, Z: B},
+			{W: 1, X: -D, Y: -F, Z: A},
+			{W: 1, X: -A, Y: -D, Z: F},
+			{W: 1, X: -F, Y: -A, Z: D},
+			{W: 1, X: -E, Y: -B, Z: C},
+			{W: 1, X: E, Y: -B, Z: C},
+			{W: 1, X: 0, Y: -P, Z: G},
+			{W: 1, X: 0, Y: -P, Z: -G},
+			{W: 1, X: E, Y: -B, Z: -C},
+			{W: 1, X: -E, Y: -B, Z: -C},
+			{W: 1, X: F, Y: -A, Z: -D},
+			{W: 1, X: A, Y: -D, Z: -F},
+			{W: 1, X: D, Y: -F, Z: -A},
+			{W: 1, X: C, Y: -E, Z: -B},
+			{W: 1, X: G, Y: 0, Z: -P},
+			{W: 1, X: C, Y: E, Z: -B},
+			{W: 1, X: D, Y: F, Z: -A},
+			{W: 1, X: F, Y: A, Z: -D},
+			{W: 1, X: A, Y: D, Z: -F},
+			{W: 1, X: E, Y: B, Z: -C},
+			{W: 1, X: -E, Y: B, Z: -C},
+			{W: 1, X: 0, Y: P, Z: -G},
+			{W: 1, X: -B, Y: C, Z: -E},
+			{W: 1, X: -B, Y: C, Z: E},
+			{W: 1, X: -P, Y: G, Z: 0},
+			{W: 1, X: -P, Y: -G, Z: 0},
+			{W: 1, X: -B, Y: -C, Z: E},
+			{W: 1, X: -B, Y: -C, Z: -E},
+			{W: 1, X: -A, Y: -D, Z: -F},
+			{W: 1, X: -F, Y: -A, Z: -D},
+			{W: 1, X: -D, Y: -F, Z: -A},
+			{W: 1, X: -C, Y: -E, Z: -B},
+			{W: 1, X: -G, Y: 0, Z: -P},
+			{W: 1, X: -C, Y: E, Z: -B},
+			{W: 1, X: -D, Y: F, Z: -A},
+			{W: 1, X: -F, Y: A, Z: -D},
+			{W: 1, X: -A, Y: D, Z: -F},
 		},
 		Edges: [][2]int{
 			{0, 1}, {0, 2}, {0, 41}, {1, 2}, {1, 13},
