@@ -28,7 +28,7 @@ func Circumsphere3(u, v, w, x Vec3) Sphere3 {
 	nw := w.NormSquared()
 	nx := x.NormSquared()
 
-	a := 2 * Determinant4(Mat4{u.X, u.Y, u.Z, 1, v.X, v.Y, v.Z, 1, w.X, w.Y, w.Z, 1, x.X, x.Y, x.Z, 1})
+	a := 2.0 * Determinant4(Mat4{u.X, u.Y, u.Z, 1, v.X, v.Y, v.Z, 1, w.X, w.Y, w.Z, 1, x.X, x.Y, x.Z, 1})
 	a = 1.0 / a
 	g := Determinant4(Mat4{nu, u.X, u.Y, u.Z, nv, v.X, v.Y, v.Z, nw, w.X, w.Y, w.Z, nx, x.X, x.Y, x.Z}) * a
 
@@ -36,6 +36,6 @@ func Circumsphere3(u, v, w, x Vec3) Sphere3 {
 	dy := -Determinant4(Mat4{nu, u.X, u.Z, 1, nv, v.X, v.Z, 1, nw, w.X, w.Z, 1, nx, x.X, x.Z, 1}) * a
 	dz := Determinant4(Mat4{nu, u.X, u.Y, 1, nv, v.X, v.Y, 1, nw, w.X, w.Y, 1, nx, x.X, x.Y, 1}) * a
 
-	return Sphere3{Vec3{dx, dy, dz}, math.Sqrt((dx*dx + dy*dy + dz*dz - 2*g))}
+	return Sphere3{Vec3{dx, dy, dz}, math.Sqrt(dx*dx + dy*dy + dz*dz - 2*g)}
 
 }
