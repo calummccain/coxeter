@@ -1,0 +1,14 @@
+1) Setup tetrahedron V E F C
+2) Set up scale and IP
+
+type GoursatTetrahedron2 struct {
+	V     vector.Vec4
+	E     vector.Vec4
+	F     vector.Vec4
+	C     vector.Vec4
+	Scale func(vector.Vec4) vector.Vec4
+	IP    func(vector.Vec4, vector.Vec4) float64
+}
+
+3) Generate the reflections generating the solid
+    a)
