@@ -41,6 +41,12 @@ type GoursatTetrahedron struct {
 	FaceReflections []string
 }
 
+func (gt *GoursatTetrahedron) DistanceSquared(u, v vector.Vec4) float64 {
+
+	return gt.IP(u, v) * gt.IP(u, v) / (gt.IP(u, u) * gt.IP(v, v))
+
+}
+
 // ProjectToPlane removes the n component of g and returns the result
 // i.e. projects g to the hyperplane with normal n.
 //  ProjectToPlane(g, n) = g - <g,n>/<n,n>n

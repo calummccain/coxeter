@@ -8,7 +8,7 @@ import (
 
 func GoursatTetrahedron43n(n float64) GoursatTetrahedron {
 
-	cot := 1.0 / math.Pow(math.Tan(math.Pi/n), 2.0)
+	//cot := 1.0 / math.Pow(math.Tan(math.Pi/n), 2.0)
 	cn := math.Cos(2.0 * math.Pi / n)
 
 	return GoursatTetrahedron{
@@ -20,7 +20,7 @@ func GoursatTetrahedron43n(n float64) GoursatTetrahedron {
 		F: vector.Vec4{W: 1, X: 1, Y: 0, Z: 0},
 		C: vector.Vec4{W: 1, X: 0, Y: 0, Z: 0},
 		Scale: func(v vector.Vec4) vector.Vec4 {
-			return vector.Vec4{W: 2.0 * cot * v.W, X: v.X, Y: v.Y, Z: v.Z}
+			return vector.Vec4{W: v.W / 2.0, X: v.X / 2.0, Y: v.Y / 2.0, Z: v.Z / 2.0}
 		},
 		IP: func(v, w vector.Vec4) float64 { return v.Dot(w) / 4.0 },
 		Matrices: ReflectionMatrices{
