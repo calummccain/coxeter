@@ -1,5 +1,7 @@
 package vector
 
+// NearestPointOnLineToPoint returns the point on the line through a and b to the point c in S^3
+
 func NearestPointOnLineToPoint(a, b, c Vec4) Vec4 {
 
 	ac := a.Dot(c)

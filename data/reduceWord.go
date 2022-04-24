@@ -6,6 +6,8 @@ import (
 	"github.com/calummccain/coxeter/vector"
 )
 
+const MAXLENGTH = 1000
+
 func ReduceWord(word string, p, q, r int) string {
 
 	done := false
@@ -92,6 +94,7 @@ func InStringSlice(word string, slice []string) bool {
 	return false
 }
 
+/*
 func reverse(s string) string {
 	rns := []rune(s) // convert to rune
 	for i, j := 0, len(rns)-1; i < j; i, j = i+1, j-1 {
@@ -104,6 +107,7 @@ func reverse(s string) string {
 	// return the reversed string.
 	return string(rns)
 }
+*/
 
 func sameMatrix(u, v []vector.Vec4) bool {
 	sum := 0.0
@@ -130,8 +134,15 @@ func (gt *GoursatTetrahedron) EnumerateReflections(reflections []Reflect, faceRe
 	for _, w := range faceReflections {
 		for _, v := range reflections {
 			new = Reflect{
-				Word:   w + v.Word,
-				Matrix: vector.TransformVertices(v.Matrix, w, gt.Matrices.A, gt.Matrices.B, gt.Matrices.C, gt.Matrices.D),
+				Word: w + v.Word,
+				Matrix: vector.TransformVertices(
+					v.Matrix,
+					w,
+					gt.BaseReflections.V,
+					gt.BaseReflections.E,
+					gt.BaseReflections.F,
+					gt.BaseReflections.C,
+				),
 			}
 			if !sameMatrixArray(new, reflections) && !sameMatrixArray(new, newRef) {
 				newRef = append(newRef, new)
@@ -139,7 +150,8 @@ func (gt *GoursatTetrahedron) EnumerateReflections(reflections []Reflect, faceRe
 		}
 	}
 
-	if len(newRef) > 0 {
+	// TODO Refactor MAXLENGTH to appear at the beginning of loop
+	if len(newRef) > 0 && len(reflections) < MAXLENGTH {
 		return gt.EnumerateReflections(append(reflections, newRef...), faceReflections)
 	} else {
 		return reflections
