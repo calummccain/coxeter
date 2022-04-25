@@ -383,7 +383,9 @@ func (uh *UniformHoneycomb) GenerateCells() []Cell {
 			}
 		}
 
-		cells = append(cells, newCell)
+		if len(newCell.Faces) > 3 {
+			cells = append(cells, newCell)
+		}
 	}
 
 	return cells
