@@ -16,7 +16,7 @@ func GoursatTetrahedron33n(n float64) GoursatTetrahedron {
 		Q:      3.0,
 		R:      n,
 		V:      vector.Vec4{W: 1, X: 1, Y: 1, Z: 1},
-		E:      vector.Vec4{W: 1, X: 1, Y: 1, Z: 0},
+		E:      vector.Vec4{W: 1, X: 1, Y: 0, Z: 0},
 		F:      vector.Vec4{W: 3, X: 1, Y: 1, Z: -1},
 		C:      vector.Vec4{W: 1, X: 0, Y: 0, Z: 0},
 		Metric: "s",
