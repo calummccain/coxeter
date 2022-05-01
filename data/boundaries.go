@@ -1,32 +1,32 @@
 package data
 
-func Boundaries(n, e, p float64) byte {
+func Boundaries(n, e, p float64) string {
 
 	eps := BoundaryEps
 
 	if n <= 2.0 {
 
-		return 'x'
+		return "x"
 
 	} else if n <= e-eps {
 
-		return 's'
+		return "s"
 
 	} else if n <= e+eps {
 
-		return 'e'
+		return "e"
 
 	} else if n <= p-eps {
 
-		return 'h'
+		return "h"
 
 	} else if n <= p+eps {
 
-		return 'p'
+		return "p"
 
 	} else {
 
-		return 'u'
+		return "u"
 
 	}
 
