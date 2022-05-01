@@ -12,16 +12,15 @@ func GoursatTetrahedron33n(n float64) GoursatTetrahedron {
 	ipVal := math.Sqrt(math.Abs(2.0*tan*tan - 1))
 
 	gt := GoursatTetrahedron{
-		P:      3.0,
-		Q:      3.0,
-		R:      n,
-		V:      vector.Vec4{W: 1, X: 1, Y: 1, Z: 1},
-		E:      vector.Vec4{W: 1, X: 1, Y: 0, Z: 0},
-		F:      vector.Vec4{W: 3, X: 1, Y: 1, Z: -1},
-		C:      vector.Vec4{W: 1, X: 0, Y: 0, Z: 0},
-		EVal:   5.1042993121, //math.Pi / math.Atan(Rt_2)
-		PVal:   6.0,
-		Metric: "s",
+		P:    3.0,
+		Q:    3.0,
+		R:    n,
+		V:    vector.Vec4{W: 1, X: 1, Y: 1, Z: 1},
+		E:    vector.Vec4{W: 1, X: 1, Y: 0, Z: 0},
+		F:    vector.Vec4{W: 3, X: 1, Y: 1, Z: -1},
+		C:    vector.Vec4{W: 1, X: 0, Y: 0, Z: 0},
+		EVal: 5.1042993121, //math.Pi / math.Atan(Rt_2)
+		PVal: 6.0,
 		Scale: func(v vector.Vec4) vector.Vec4 {
 			return vector.Vec4{W: v.W, X: v.X * ipVal, Y: v.Y * ipVal, Z: v.Z * ipVal}
 		},
