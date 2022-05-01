@@ -37,7 +37,6 @@ func GoursatTetrahedron33n(n float64) GoursatTetrahedron {
 
 	gt.Populate()
 
-	//TODO Mertic and IP
 	return gt
 
 }
