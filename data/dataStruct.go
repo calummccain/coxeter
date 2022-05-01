@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/calummccain/coxeter/vector"
@@ -93,6 +94,8 @@ type GoursatTetrahedron struct {
 	E               vector.Vec4
 	F               vector.Vec4
 	C               vector.Vec4
+	EVal            float64
+	PVal            float64
 	Distances       Distances
 	Normals         Normals
 	Heights         Heights
@@ -101,6 +104,62 @@ type GoursatTetrahedron struct {
 	Scale           func(vector.Vec4) vector.Vec4
 	IP              func(vector.Vec4, vector.Vec4) float64
 	Metric          string
+}
+
+func (gt *GoursatTetrahedron) Dump() {
+
+	fmt.Printf("--------------------------------------------------------------\n")
+
+	fmt.Printf("              p: %d\n", int(gt.P))
+	fmt.Printf("              q: %d\n", int(gt.Q))
+	if gt.R == float64(int(gt.R)) {
+		fmt.Printf("              r: %d\n", int(gt.R))
+	} else {
+		fmt.Printf("              r: %f\n", gt.R)
+	}
+
+	fmt.Printf("Coxeter diagram: o---o---o---o\n")
+	if gt.R == float64(int(gt.R)) {
+		fmt.Printf("                   %d   %d   %d\n", int(gt.P), int(gt.Q), int(gt.R))
+	} else {
+		fmt.Printf("                   %d   %d   %f\n", int(gt.P), int(gt.Q), gt.R)
+	}
+
+	switch gt.Metric {
+	case "s":
+		fmt.Printf("         Metric: Spherical\n")
+	case "e":
+		fmt.Printf("         Metric: Euclidean\n")
+	case "h":
+		fmt.Printf("         Metric: Hyperbolic - compact\n")
+	case "p":
+		fmt.Printf("         Metric: Hyperbolic - paracompact\n")
+	case "u":
+		fmt.Printf("         Metric: Hyperbolic - ultracompact\n")
+	}
+
+	fmt.Printf("              V: (%f, %f, %f, %f)\n", gt.V.W, gt.V.X, gt.V.Y, gt.V.Z)
+	fmt.Printf("              E: (%f, %f, %f, %f)\n", gt.E.W, gt.E.X, gt.E.Y, gt.E.Z)
+	fmt.Printf("              F: (%f, %f, %f, %f)\n", gt.F.W, gt.F.X, gt.F.Y, gt.F.Z)
+	fmt.Printf("              C: (%f, %f, %f, %f)\n", gt.C.W, gt.C.X, gt.C.Y, gt.C.Z)
+
+	fmt.Printf("          <V,E>: %f\n", gt.Distances.VE)
+	fmt.Printf("          <V,F>: %f\n", gt.Distances.VF)
+	fmt.Printf("          <V,C>: %f\n", gt.Distances.VC)
+	fmt.Printf("          <E,F>: %f\n", gt.Distances.EF)
+	fmt.Printf("          <E,C>: %f\n", gt.Distances.EC)
+	fmt.Printf("          <F,C>: %f\n", gt.Distances.FC)
+
+	fmt.Printf("            EFC: (%f, %f, %f, %f)\n", gt.Normals.EFC.W, gt.Normals.EFC.X, gt.Normals.EFC.Y, gt.Normals.EFC.Z)
+	fmt.Printf("            VFC: (%f, %f, %f, %f)\n", gt.Normals.VFC.W, gt.Normals.VFC.X, gt.Normals.VFC.Y, gt.Normals.VFC.Z)
+	fmt.Printf("            VEC: (%f, %f, %f, %f)\n", gt.Normals.VEC.W, gt.Normals.VEC.X, gt.Normals.VEC.Y, gt.Normals.VEC.Z)
+	fmt.Printf("            VEF: (%f, %f, %f, %f)\n", gt.Normals.VEF.W, gt.Normals.VEF.X, gt.Normals.VEF.Y, gt.Normals.VEF.Z)
+
+	fmt.Printf("        V - EFC: %f\n", gt.Heights.V)
+	fmt.Printf("        E - VFC: %f\n", gt.Heights.E)
+	fmt.Printf("        F - VEC: %f\n", gt.Heights.F)
+	fmt.Printf("        C - VEF: %f\n", gt.Heights.C)
+
 }
 
 func (gt *GoursatTetrahedron) DistanceSquared(u, v vector.Vec4) float64 {
