@@ -19,10 +19,20 @@ func GoursatTetrahedron33n(n float64) GoursatTetrahedron {
 		E:      vector.Vec4{W: 1, X: 1, Y: 0, Z: 0},
 		F:      vector.Vec4{W: 3, X: 1, Y: 1, Z: -1},
 		C:      vector.Vec4{W: 1, X: 0, Y: 0, Z: 0},
+		EVal:   5.1042993121, //math.Pi / math.Atan(Rt_2)
+		PVal:   6.0,
 		Metric: "s",
 		Scale: func(v vector.Vec4) vector.Vec4 {
 			return vector.Vec4{W: v.W, X: v.X * ipVal, Y: v.Y * ipVal, Z: v.Z * ipVal}
 		},
+	}
+
+	gt.Metric = Boundaries(n, gt.EVal, gt.PVal)
+
+	if gt.Metric == "e" {
+		gt.Scale = func(v vector.Vec4) vector.Vec4 {
+			return v
+		}
 	}
 
 	gt.Populate()
