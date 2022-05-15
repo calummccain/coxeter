@@ -175,7 +175,10 @@ func (gt *GoursatTetrahedron) DistanceSquared(u, v vector.Vec4) float64 {
 //  ProjectToPlane(g, n) = g - <g,n> n
 func (gt *GoursatTetrahedron) ProjectToPlane(g, n vector.Vec4) vector.Vec4 {
 
-	return vector.Diff4(g, vector.Scale4(n, gt.IP(g, n)))
+	w := vector.Diff4(g, vector.Scale4(n, gt.IP(g, n)/gt.IP(n, n)))
+	w = gt.Normalise(w)
+
+	return w
 
 }
 
@@ -189,14 +192,16 @@ func (gt *GoursatTetrahedron) ReflectionGenerator(n vector.Vec4) func(vector.Vec
 
 func (gt *GoursatTetrahedron) ProjectToLine(d, n, m vector.Vec4) vector.Vec4 {
 
-	//n = gt.Normalise(n)
-	//m = gt.Normalise(m)
-
 	nm := gt.IP(n, m)
+	nn := gt.IP(n, n)
+	mm := gt.IP(m, m)
 	dn := gt.IP(d, n)
 	dm := gt.IP(d, m)
 
-	return vector.Diff4(d, vector.Sum4(vector.Scale4(n, (dn-nm*dm)/(1-nm*nm)), vector.Scale4(m, (dm-nm*dn)/(1-nm*nm))))
+	w := vector.Sum4(d, vector.Sum4(vector.Scale4(n, (dn*mm-nm*dm)/(nm*nm-nn*mm)), vector.Scale4(m, (dm*nn-nm*dn)/(nm*nm-nn*mm))))
+	w = gt.Normalise(w)
+
+	return w
 
 }
 
@@ -226,10 +231,15 @@ func (gt *GoursatTetrahedron) Normalise(v vector.Vec4) vector.Vec4 {
 
 func (gt *GoursatTetrahedron) GenerateInnerProduct() {
 
-	if gt.Metric == "s" {
+	switch gt.Metric {
+	case "s":
 		gt.IP = vector.Dot4
+	case "e":
+		gt.IP = vector.Distance4
+	case "h":
+		gt.IP = vector.HDot4
 	}
-	// TODO Other metrics
+
 }
 
 func (gt *GoursatTetrahedron) Populate() {
@@ -247,8 +257,17 @@ func (gt *GoursatTetrahedron) Populate() {
 		FC: gt.IP(gt.F, gt.C),
 	}
 
-	// TODO Directional tangent only valid for spherical
-	gt.Normals.EFC = vector.DirectionalTangent(gt.E, gt.V)
+	var dt func(a, b vector.Vec4) vector.Vec4
+	switch gt.Metric {
+	case "s":
+		dt = vector.SDirectionalTangent
+	case "e":
+		dt = vector.EDirectionalTangent
+	case "h":
+		dt = vector.HDirectionalTangent
+	}
+
+	gt.Normals.EFC = dt(gt.E, gt.V)
 	gt.Normals.VFC = vector.Scale4(
 		vector.Diff4(
 			vector.Scale4(gt.E, 1.0-gt.Distances.VF*gt.Distances.VF),
@@ -267,7 +286,7 @@ func (gt *GoursatTetrahedron) Populate() {
 			),
 		), 1.0/math.Sqrt((1.0-gt.Distances.EC*gt.Distances.EC)*(1.0-gt.Distances.EF*gt.Distances.EF)*(1.0-gt.Distances.FC*gt.Distances.FC)),
 	)
-	gt.Normals.VEF = vector.DirectionalTangent(gt.F, gt.C)
+	gt.Normals.VEF = dt(gt.F, gt.C)
 
 	gt.Heights.V = math.Sqrt(1.0 - gt.Distances.VE*gt.Distances.VE)
 	gt.Heights.E = math.Sqrt(1.0-gt.Distances.EF*gt.Distances.EF) * math.Sqrt(1.0-gt.Distances.VE*gt.Distances.VE) / math.Sqrt(1.0-gt.Distances.VF*gt.Distances.VF)

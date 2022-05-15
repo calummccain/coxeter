@@ -58,6 +58,10 @@ func (v *Vec4) Dot(w Vec4) float64 {
 	return v.W*w.W + v.X*w.X + v.Y*w.Y + v.Z*w.Z
 }
 
+func (v *Vec4) HDot(w Vec4) float64 {
+	return v.W*w.W - v.X*w.X - v.Y*w.Y - v.Z*w.Z
+}
+
 func Scale4(v Vec4, a float64) Vec4 {
 	return Vec4{v.W * a, v.X * a, v.Y * a, v.Z * a}
 }
@@ -74,12 +78,24 @@ func Dot4(v, w Vec4) float64 {
 	return v.W*w.W + v.X*w.X + v.Y*w.Y + v.Z*w.Z
 }
 
+func HDot4(v, w Vec4) float64 {
+	return v.W*w.W - v.X*w.X - v.Y*w.Y - v.Z*w.Z
+}
+
 func Midpoint4(v, w Vec4) Vec4 {
 	return Scale4(Sum4(v, w), 0.5)
 }
 
+func Norm4(v Vec4) float64 {
+	return math.Sqrt(v.W*v.W + v.X*v.X + v.Y*v.Y + v.Z*v.Z)
+}
+
 func NormSquared4(v Vec4) float64 {
 	return v.W*v.W + v.X*v.X + v.Y*v.Y + v.Z*v.Z
+}
+
+func Distance4(v, w Vec4) float64 {
+	return Norm4(Diff4(v, w))
 }
 
 func DistanceSquared4(v, w Vec4) float64 {
