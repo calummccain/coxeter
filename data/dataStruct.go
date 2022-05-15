@@ -275,7 +275,7 @@ func (gt *GoursatTetrahedron) Populate() {
 				vector.Scale4(gt.V, gt.Distances.VE*(1.0-gt.Distances.EF*gt.Distances.EF)),
 				vector.Scale4(gt.F, gt.Distances.EF*(1.0-gt.Distances.VE*gt.Distances.VE)),
 			),
-		), 1.0/math.Sqrt((1.0-gt.Distances.VF*gt.Distances.VF)*(1.0-gt.Distances.EF*gt.Distances.EF)*(1.0-gt.Distances.VE*gt.Distances.VE)),
+		), 1.0/math.Sqrt(math.Abs((1.0-gt.Distances.VF*gt.Distances.VF)*(1.0-gt.Distances.EF*gt.Distances.EF)*(1.0-gt.Distances.VE*gt.Distances.VE))),
 	)
 	gt.Normals.VEC = vector.Scale4(
 		vector.Diff4(
@@ -284,14 +284,14 @@ func (gt *GoursatTetrahedron) Populate() {
 				vector.Scale4(gt.C, gt.Distances.FC*(1.0-gt.Distances.EF*gt.Distances.EF)),
 				vector.Scale4(gt.E, gt.Distances.EF*(1.0-gt.Distances.FC*gt.Distances.FC)),
 			),
-		), 1.0/math.Sqrt((1.0-gt.Distances.EC*gt.Distances.EC)*(1.0-gt.Distances.EF*gt.Distances.EF)*(1.0-gt.Distances.FC*gt.Distances.FC)),
+		), 1.0/math.Sqrt(math.Abs((1.0-gt.Distances.EC*gt.Distances.EC)*(1.0-gt.Distances.EF*gt.Distances.EF)*(1.0-gt.Distances.FC*gt.Distances.FC))),
 	)
 	gt.Normals.VEF = dt(gt.F, gt.C)
 
-	gt.Heights.V = math.Sqrt(1.0 - gt.Distances.VE*gt.Distances.VE)
-	gt.Heights.E = math.Sqrt(1.0-gt.Distances.EF*gt.Distances.EF) * math.Sqrt(1.0-gt.Distances.VE*gt.Distances.VE) / math.Sqrt(1.0-gt.Distances.VF*gt.Distances.VF)
-	gt.Heights.F = math.Sqrt(1.0-gt.Distances.EF*gt.Distances.EF) * math.Sqrt(1.0-gt.Distances.FC*gt.Distances.FC) / math.Sqrt(1.0-gt.Distances.EC*gt.Distances.EC)
-	gt.Heights.C = math.Sqrt(1.0 - gt.Distances.FC*gt.Distances.FC)
+	gt.Heights.V = math.Sqrt(math.Abs(1.0 - gt.Distances.VE*gt.Distances.VE))
+	gt.Heights.E = math.Sqrt(math.Abs(1.0-gt.Distances.EF*gt.Distances.EF)) * math.Sqrt(math.Abs(1.0-gt.Distances.VE*gt.Distances.VE)) / math.Sqrt(math.Abs(1.0-gt.Distances.VF*gt.Distances.VF))
+	gt.Heights.F = math.Sqrt(math.Abs(1.0-gt.Distances.EF*gt.Distances.EF)) * math.Sqrt(math.Abs(1.0-gt.Distances.FC*gt.Distances.FC)) / math.Sqrt(math.Abs(1.0-gt.Distances.EC*gt.Distances.EC))
+	gt.Heights.C = math.Sqrt(math.Abs(1.0 - gt.Distances.FC*gt.Distances.FC))
 
 	gt.BaseReflections.V = gt.ReflectionGenerator(gt.Normals.EFC)
 	gt.BaseReflections.E = gt.ReflectionGenerator(gt.Normals.VFC)
@@ -322,34 +322,34 @@ func (gt *GoursatTetrahedron) UniformHoneycombGenerator(v, e, f, c float64) Unif
 
 	uf.G.IP = gt.IP(uf.G.Vector, uf.G.Vector)
 
-	uf.G_VEF.Vector = gt.Normalise(gt.ProjectToPlane(G, gt.Normals.VEF))
+	uf.G_VEF.Vector = gt.ProjectToPlane(G, gt.Normals.VEF)
 	uf.G_VEF.IP = gt.IP(uf.G_VEF.Vector, uf.G.Vector)
 
-	uf.G_VE.Vector = gt.Normalise(gt.ProjectToLine(G, gt.Normals.VEF, gt.Normals.VEC))
+	uf.G_VE.Vector = gt.ProjectToLine(G, gt.Normals.VEF, gt.Normals.VEC)
 	uf.G_VE.IP = gt.IP(uf.G_VE.Vector, uf.G.Vector)
 
-	uf.G_VFC.Vector = gt.Normalise(gt.ProjectToPlane(G, gt.Normals.VFC))
+	uf.G_VFC.Vector = gt.ProjectToPlane(G, gt.Normals.VFC)
 	uf.G_VFC.IP = gt.IP(uf.G_VFC.Vector, uf.G.Vector)
 
-	uf.G_VF.Vector = gt.Normalise(gt.ProjectToLine(G, gt.Normals.VEF, gt.Normals.VFC))
+	uf.G_VF.Vector = gt.ProjectToLine(G, gt.Normals.VEF, gt.Normals.VFC)
 	uf.G_VF.IP = gt.IP(uf.G_VF.Vector, uf.G.Vector)
 
-	uf.G_VEC.Vector = gt.Normalise(gt.ProjectToPlane(G, gt.Normals.VEC))
+	uf.G_VEC.Vector = gt.ProjectToPlane(G, gt.Normals.VEC)
 	uf.G_VEC.IP = gt.IP(uf.G_VEC.Vector, uf.G.Vector)
 
-	uf.G_VC.Vector = gt.Normalise(gt.ProjectToLine(G, gt.Normals.VEC, gt.Normals.VFC))
+	uf.G_VC.Vector = gt.ProjectToLine(G, gt.Normals.VEC, gt.Normals.VFC)
 	uf.G_VC.IP = gt.IP(uf.G_VC.Vector, uf.G.Vector)
 
-	uf.G_EFC.Vector = gt.Normalise(gt.ProjectToPlane(G, gt.Normals.EFC))
+	uf.G_EFC.Vector = gt.ProjectToPlane(G, gt.Normals.EFC)
 	uf.G_EFC.IP = gt.IP(uf.G_EFC.Vector, uf.G.Vector)
 
-	uf.G_EF.Vector = gt.Normalise(gt.ProjectToLine(G, gt.Normals.VEF, gt.Normals.EFC))
+	uf.G_EF.Vector = gt.ProjectToLine(G, gt.Normals.VEF, gt.Normals.EFC)
 	uf.G_EF.IP = gt.IP(uf.G_EF.Vector, uf.G.Vector)
 
-	uf.G_EC.Vector = gt.Normalise(gt.ProjectToLine(G, gt.Normals.VEC, gt.Normals.EFC))
+	uf.G_EC.Vector = gt.ProjectToLine(G, gt.Normals.VEC, gt.Normals.EFC)
 	uf.G_EC.IP = gt.IP(uf.G_EC.Vector, uf.G.Vector)
 
-	uf.G_FC.Vector = gt.Normalise(gt.ProjectToLine(G, gt.Normals.VFC, gt.Normals.EFC))
+	uf.G_FC.Vector = gt.ProjectToLine(G, gt.Normals.VFC, gt.Normals.EFC)
 	uf.G_FC.IP = gt.IP(uf.G_FC.Vector, uf.G.Vector)
 
 	return uf
