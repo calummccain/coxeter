@@ -24,7 +24,7 @@ func EDirectionalTangent(a, b Vec4) Vec4 {
 // a -> b
 func HDirectionalTangent(a, b Vec4) Vec4 {
 
-	ab := a.Dot(b)
+	ab := a.HDot(b)
 
 	return Scale4(Diff4(b, Scale4(a, ab)), 1.0/math.Sqrt(ab*ab-1))
 
