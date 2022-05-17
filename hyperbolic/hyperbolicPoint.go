@@ -46,6 +46,10 @@ func (p *HPoint) HyperbolicNorm() {
 	p.Norm = p.H.W*p.H.W - p.H.X*p.H.X - p.H.Y*p.H.Y - p.H.Z*p.H.Z
 }
 
+func (p *HPoint) Normalise() {
+	p.H.Scale(1.0 / math.Sqrt(math.Abs(p.HyperboloidInnerProduct(*p))))
+}
+
 func (p *HPoint) HyperboloidToKlein() {
 	inv := 1.0 / p.H.W
 	p.K.X = p.H.X * inv
