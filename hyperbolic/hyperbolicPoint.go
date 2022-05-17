@@ -47,7 +47,7 @@ func (p *HPoint) HyperbolicNorm() {
 }
 
 func (p *HPoint) Normalise() {
-	p.H.Scale(1.0 / math.Sqrt(math.Abs(p.HyperboloidInnerProduct(*p))))
+	p.H.Scale(1.0 / math.Sqrt(math.Abs(HyperboloidInnerProduct(p.H, p.H))))
 }
 
 func (p *HPoint) HyperboloidToKlein() {
