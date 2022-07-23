@@ -6,6 +6,17 @@ import (
 	"github.com/calummccain/coxeter/vector"
 )
 
+//=========================================================
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
+// GoursatTetrahedron33n returns the key Goursat Tetrahedron data for
+// the {3,3,n} polytope.
+//
+// Inputs:
+//	n float64s
+
 func GoursatTetrahedron33n(n float64) GoursatTetrahedron {
 
 	tan := math.Tan(math.Pi / n)

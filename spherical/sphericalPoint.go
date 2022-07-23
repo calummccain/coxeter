@@ -28,7 +28,7 @@ func (p *SPoint) StereoToHyper() {
 
 	r := p.S.NormSquared()
 
-	p.H = vector.Vec4{W: (r - 1.0) * 0.5, X: p.S.X, Y: p.S.Y, Z: p.S.Z}
+	p.H = vector.Vec4{W: (1.0 - r) * 0.5, X: p.S.X, Y: p.S.Y, Z: p.S.Z}
 	p.H.Scale(2.0 / (r + 1.0))
 
 }

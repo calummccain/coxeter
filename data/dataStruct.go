@@ -238,6 +238,10 @@ func (gt *GoursatTetrahedron) GenerateInnerProduct() {
 		gt.IP = vector.Distance4
 	case "h":
 		gt.IP = vector.HDot4
+	case "p":
+		gt.IP = func(u, v vector.Vec4) float64 {
+			return u.X*v.X + u.Y*v.Y + u.Z*v.Z
+		}
 	}
 
 }
@@ -264,6 +268,8 @@ func (gt *GoursatTetrahedron) Populate() {
 	case "e":
 		dt = vector.EDirectionalTangent
 	case "h":
+		dt = vector.HDirectionalTangent
+	case "p":
 		dt = vector.HDirectionalTangent
 	}
 

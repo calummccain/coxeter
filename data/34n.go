@@ -6,6 +6,11 @@ import (
 	"github.com/calummccain/coxeter/vector"
 )
 
+//=========================================================
+// Change history:
+//     ??/??/?? Initial commit
+//=========================================================
+
 func GoursatTetrahedron34n(n float64) GoursatTetrahedron {
 
 	tan := math.Tan(math.Pi / n)
